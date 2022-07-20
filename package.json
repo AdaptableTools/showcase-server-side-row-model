@@ -11,10 +11,6 @@
   "author": "AdaptableTools",
   "license": "MIT",
   "devDependencies": {},
-  "dependencies": {
-    "@netlify/functions": "^1.0.0",
-    "alasql": "^1.7.3"
-  },
   "repository": {
     "type": "git",
     "url": "ag-grid-server-side-demo"
