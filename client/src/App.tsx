@@ -1,5 +1,4 @@
 import * as React from "react";
-import omit from "lodash.omit";
 // import Adaptable Component and other types
 import AdaptableReact, {
   AdaptableApi,
@@ -27,7 +26,7 @@ import {
 
 const LICENSE_KEY = process.env.REACT_APP_ADAPTABLE_LICENSE_KEY;
 const LOCAL = "http://localhost:4000/api";
-const NETLIFY = "http://localhost:9999/.netlify/functions/athletes";
+// const NETLIFY = "http://localhost:9999/.netlify/functions/athletes";
 const API_URL = process.env.REACT_APP_ADAPTABLE_API_PATH ?? LOCAL;
 
 const createDataSource = (adaptableApi: AdaptableApi) => ({
