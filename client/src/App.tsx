@@ -25,9 +25,10 @@ import {
   GridOptions,
 } from "@ag-grid-enterprise/all-modules";
 
+const LICENSE_KEY = process.env.REACT_APP_ADAPTABLE_LICENSE_KEY;
 const LOCAL = "http://localhost:4000/api";
 const NETLIFY = "http://localhost:9999/.netlify/functions/athletes";
-const API_URL = NETLIFY;
+const API_URL = process.env.REACT_APP_ADAPTABLE_API_PATH ?? LOCAL;
 
 const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: any) {
@@ -107,7 +108,7 @@ const gridOptions: GridOptions = {
 const adaptableOptions: AdaptableOptions = {
   primaryKey: "id",
   userName: "Server-side Demo",
-  licenseKey: process.env.REACT_APP_ADAPTABLE_LICENSE_KEY,
+  licenseKey: LICENSE_KEY,
   adaptableId: "adaptable server side demo",
   settingsPanelOptions: {},
   adaptableQLOptions: {
