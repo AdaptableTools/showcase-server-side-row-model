@@ -2,7 +2,7 @@ import { Handler } from "@netlify/functions";
 import alasql from "alasql";
 import { SqlCLient } from "../../../server/SqlCLient";
 
-// @ts-ignore netlify does not know how to load .sql files
+// @ts-ignore
 import olympicdata from "../../../server/data/olympic_winners.txt";
 
 alasql(olympicdata);
