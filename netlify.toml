@@ -1,0 +1,3 @@
+[functions]
+  directory = "server/netlify/functions"
+  external_node_modules = ["alasql"]
