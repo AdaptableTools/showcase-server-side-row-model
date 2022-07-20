@@ -4,8 +4,7 @@
   "scripts": {
     "start:server": "cd server && npm run start",
     "start:client": "cd client && npm run start",
-    "start": "concurrently --kill-others -n \"npm:start:server\" \"npm:start:client\"",
-    "start:functions": "npx netlify functions:serve"
+    "start": "concurrently --kill-others -n \"npm:start:server\" \"npm:start:client\""
   },
   "keywords": [],
   "author": "AdaptableTools",
