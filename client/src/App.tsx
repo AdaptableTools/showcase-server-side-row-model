@@ -108,7 +108,7 @@ const adaptableOptions: AdaptableOptions = {
   primaryKey: "id",
   userName: "Server-side Demo",
   licenseKey: LICENSE_KEY,
-  adaptableId: "adaptable server side demo",
+  adaptableId: "AdapTable ServerRowModel Demo",
   settingsPanelOptions: {},
   adaptableQLOptions: {
     expressionOptions: {
