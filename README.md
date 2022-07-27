@@ -1,6 +1,8 @@
 # Adaptable Server-Side Node.js Example
 
-This example is based on ag-grid nodejs-example https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/.
+This small demo application is designed to show how you can use [AdapTable](https://www.adaptabletools.com/) while using AG Grid's [ServerRowModel](https://www.ag-grid.com/javascript-data-grid/server-side-model/).
+
+It is based on AG Grid's own nodejs-example https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/ using the same data source.
 
 ## Usage
 
