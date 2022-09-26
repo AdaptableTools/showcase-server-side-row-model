@@ -33,7 +33,11 @@ export const handler: Handler = async (event, context) => {
 
   try {
     body = JSON.parse(event.body);
-    const data = await sqlClient.getData(body, body.adaptableFilters);
+    const data = await sqlClient.getData(
+      body,
+      body.adaptableFilters,
+      body.queryAST
+    );
 
     return {
       statusCode: 200,
@@ -43,7 +47,7 @@ export const handler: Handler = async (event, context) => {
       },
     };
   } catch (e) {
-    console.log("failed to parse body");
+    console.log("failed to parse body", e);
   }
 
   return {

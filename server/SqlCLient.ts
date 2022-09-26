@@ -24,9 +24,13 @@ export class SqlCLient {
     });
   }
 
-  getData(request: IServerSideGetRowsRequest, filters: ColumnFilterDef[]) {
-    const sql = this.sqlService.buildSql(request, filters);
-    console.log("sql", sql);
+  getData(
+    request: IServerSideGetRowsRequest,
+    filters: ColumnFilterDef[],
+    queryAST: any
+  ) {
+    const sql = this.sqlService.buildSql(request, filters, queryAST);
+
     const results = alasql(sql);
     const lastRow = this.getRowCount(request, results);
 

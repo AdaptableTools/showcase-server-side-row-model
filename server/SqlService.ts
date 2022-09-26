@@ -20,11 +20,12 @@ export class AdaptableSqlService {
 
   public buildSql(
     request: IServerSideGetRowsRequest,
-    filters?: ColumnFilterDef[]
+    filters?: ColumnFilterDef[],
+    queryAST: any
   ) {
     const selectSql = this.createSelectSql(request);
     const fromSql = ` FROM  ${this.tableName}`;
-    const whereSql = this.createAdaptableWhereSql(filters);
+    const whereSql = this.createAdaptableWhereSql(filters, queryAST);
     const limitSql = this.createLimitSql(request);
 
     const orderBySql = this.createOrderBySql(request);
@@ -32,6 +33,9 @@ export class AdaptableSqlService {
 
     const SQL =
       selectSql + fromSql + whereSql + groupBySql + orderBySql + limitSql;
+
+    console.log("QUERY", SQL);
+
     return SQL;
   }
 
@@ -59,11 +63,28 @@ export class AdaptableSqlService {
     return `select *`;
   }
 
-  createAdaptableWhereSql(filters?: ColumnFilterDef[]) {
+  createAdaptableWhereSql(filters?: ColumnFilterDef[], queryAST?: any): string {
     if (!filters) {
       return "";
     }
 
+    const whereParts = [];
+    whereParts.push(...this.buildFilterWhereParts(filters));
+
+    const astPart = this.buildQueryASTWherePart(queryAST);
+    astPart.length && whereParts.push(astPart);
+
+    if (whereParts.length > 0) {
+      return " where " + whereParts.join(" and ");
+    } else {
+      return "";
+    }
+  }
+
+  private buildFilterWhereParts(filters?: ColumnFilterDef[]): string[] {
+    if (!filters) {
+      return [];
+    }
     const whereParts = [];
     for (const filter of filters) {
       if (filter.dataType === "String") {
@@ -88,12 +109,7 @@ export class AdaptableSqlService {
         wherePart && whereParts.push(wherePart);
       }
     }
-
-    if (whereParts.length > 0) {
-      return " where " + whereParts.join(" and ");
-    } else {
-      return "";
-    }
+    return whereParts;
   }
 
   createAdaptableTextFilterSql(columnFilter: ColumnFilter) {
@@ -416,5 +432,68 @@ export class AdaptableSqlService {
 
     const pageSize = endRow - startRow;
     return " limit " + (pageSize + 1) + " offset " + startRow;
+  }
+
+  private buildQueryASTWherePart(queryAST?: any): string {
+    if (typeof queryAST === undefined) {
+      return "";
+    }
+
+    if (typeof queryAST === "string") {
+      return `"${queryAST}"`;
+    }
+    if (typeof queryAST === "number") {
+      return `${queryAST}`;
+    }
+    if (typeof queryAST === "boolean") {
+      return queryAST === true ? "TRUE" : "FALSE";
+    }
+    if (Array.isArray(queryAST)) {
+      return queryAST
+        .map((item) => this.buildQueryASTWherePart(item))
+        .join(" ");
+    }
+
+    const args = queryAST.args.map((n: any) => this.buildQueryASTWherePart(n));
+    switch (queryAST.type) {
+      case "COL":
+        const [colName] = queryAST.args;
+        return colName;
+      case "EQ":
+        return `${args[0]} = ${args[1]}`;
+      case "NEQ":
+        return `${args[0]} != ${args[1]}`;
+      case "GT":
+        return `${args[0]} > ${args[1]}`;
+      case "LT":
+        return `${args[0]} < ${args[1]}`;
+      case "GTE":
+        return `${args[0]} >= ${args[1]}`;
+      case "OR":
+        return `${args[0]} OR ${args[1]}`;
+      case "AND":
+        return `${args[0]} AND ${args[1]}`;
+      case "NOT":
+        return `IS NOT ${args[0]}`;
+      case "BETWEEN":
+        return `${args[0]} >= ${args[1]} AND ${args[0]} <= ${args[2]}`;
+      case "IN":
+        return args[1]
+          .split(" ")
+          .map((input: string) => {
+            return `${args[0]} = ${input}`;
+          })
+          .join(" OR ");
+      case "IS_BLANK":
+        return `${args[0]} IS NULL`;
+      case "CONTAINS":
+        return `${args[0]} LIKE '%${args[1]}%'`;
+      case "STARTS_WITH":
+        return `${args[0]} LIKE '${args[1]}%'`;
+      case "ENDS_WITH":
+        return `${args[0]} LIKE '%${args[1]}'`;
+    }
+
+    return "";
   }
 }
