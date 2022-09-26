@@ -106,9 +106,9 @@ const gridOptions: GridOptions = {
 
 const adaptableOptions: AdaptableOptions = {
   primaryKey: "id",
-  userName: "Server-side Demo",
+  userName: "server-side-demo-user",
   licenseKey: LICENSE_KEY,
-  adaptableId: "adaptable server side demo",
+  adaptableId: "AdapTable ServerRowModel Demo",
   settingsPanelOptions: {},
   adaptableQLOptions: {
     expressionOptions: {
@@ -117,7 +117,6 @@ const adaptableOptions: AdaptableOptions = {
   },
   predefinedConfig: {
     Layout: {
-      Revision: Date.now(),
       CurrentLayout: "All Columns Layout",
       Layouts: [
         {
