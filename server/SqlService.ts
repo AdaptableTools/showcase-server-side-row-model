@@ -2,7 +2,6 @@ import { ColumnVO } from "@ag-grid-community/all-modules";
 import { IServerSideGetRowsRequest } from "@ag-grid-community/core";
 import { AdaptablePredicateDef, ColumnFilter } from "@adaptabletools/adaptable";
 
-// TODO: import from adaptable when released
 export interface ColumnFilterDef {
   dataType: "String" | "Number" | "Date" | "Boolean";
   predicate: AdaptablePredicateDef;

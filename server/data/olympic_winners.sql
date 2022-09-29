@@ -1,5 +1,5 @@
 CREATE TABLE `olympic_winners` (
-  `id` INT AUTO_INCREMENT, 
+  `id` UUID DEFAULT gen_random_uuid(), 
   `athlete` varchar(20) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
   `country` varchar(20) DEFAULT NULL,
