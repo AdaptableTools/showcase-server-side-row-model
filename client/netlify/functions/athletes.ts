@@ -26,12 +26,27 @@ export const handler: Handler = async (event, context) => {
     };
   }
 
-  let body: any = {};
-  if (!event.body) {
-    throw '"body" is required';
+  if (event.httpMethod === "GET" && event.path.includes("/permitted-values")) {
+    if (!event.queryStringParameters.columnId) {
+      throw new Error("columnId is not defined");
+    }
+    const permittedValues = await sqlClient.getPermittedValues(
+      event.queryStringParameters.columnId
+    );
+    return {
+      statusCode: 200,
+      body: JSON.stringify(permittedValues),
+      headers: {
+        ...corsHeaders,
+      },
+    };
   }
 
   try {
+    let body: any = {};
+    if (!event.body) {
+      throw '"body" is required';
+    }
     body = JSON.parse(event.body);
     const data = await sqlClient.getData(
       body,

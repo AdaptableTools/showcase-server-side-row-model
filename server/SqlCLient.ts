@@ -16,7 +16,6 @@ export class SqlCLient {
   getPermittedValues(columnName: string): Promise<string[]> {
     const sql = `SELECT DISTINCT ${columnName} FROM olympic_winners`;
     const results = alasql(sql).map((result: any) => result[columnName]);
-    console.log("permitted values", results);
     return new Promise((res) => {
       setTimeout(() => {
         res(results);
