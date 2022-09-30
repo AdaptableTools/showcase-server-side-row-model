@@ -2,7 +2,7 @@ import { IServerSideGetRowsRequest } from "@ag-grid-community/all-modules";
 import alasql from "alasql";
 import { AdaptableSqlService, ColumnFilterDef } from "./SqlService";
 
-export class SqlCLient {
+export class SqlClient {
   sqlService: AdaptableSqlService;
   tableName: string;
   primaryKey: string;
@@ -16,27 +16,37 @@ export class SqlCLient {
   getPermittedValues(columnName: string): Promise<string[]> {
     const sql = `SELECT DISTINCT ${columnName} FROM olympic_winners`;
     const results = alasql(sql).map((result: any) => result[columnName]);
-    return new Promise((res) => {
-      setTimeout(() => {
-        res(results);
-      }, 2000);
-    });
+    return results;
   }
 
   getData(
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
-    queryAST: any
+    queryAST: any,
+    includeCount: boolean = false
   ) {
     const sql = this.sqlService.buildSql(request, filters, queryAST);
+    const countSql = this.sqlService.buildCountSql(request, filters, queryAST);
 
     const results = alasql(sql);
     const lastRow = this.getRowCount(request, results);
 
-    return {
+    const result: {
+      rows: any[];
+      lastRow: number;
+      count?: number;
+    } = {
       rows: results,
       lastRow: lastRow,
     };
+
+    if (includeCount) {
+      const count = alasql(countSql);
+      console.log({ countSql });
+      result["count"] = count[0]["COUNT(*)"] as number;
+    }
+
+    return result;
   }
 
   getRowCount(request: IServerSideGetRowsRequest, results: any[]) {

@@ -1,13 +1,13 @@
 import { Handler } from "@netlify/functions";
 import alasql from "alasql";
-import { SqlCLient } from "../../../server/SqlCLient";
+import { SqlClient } from "../../../server/SqlClient";
 
 // @ts-ignore
 import olympicdata from "../../../server/data/olympic_winners.txt";
 
 alasql(olympicdata);
 
-const sqlClient = new SqlCLient("Id", "olympic_winners");
+const sqlClient = new SqlClient("Id", "olympic_winners");
 
 const corsHeaders = {
   "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -47,11 +47,14 @@ export const handler: Handler = async (event, context) => {
     if (!event.body) {
       throw '"body" is required';
     }
+
     body = JSON.parse(event.body);
+
     const data = await sqlClient.getData(
       body,
       body.adaptableFilters,
-      body.queryAST
+      body.queryAST,
+      body.includeCount
     );
 
     return {

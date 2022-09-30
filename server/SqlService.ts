@@ -20,7 +20,7 @@ export class AdaptableSqlService {
   public buildSql(
     request: IServerSideGetRowsRequest,
     filters?: ColumnFilterDef[],
-    queryAST: any
+    queryAST?: any
   ) {
     const selectSql = this.createSelectSql(request);
     const fromSql = ` FROM  ${this.tableName}`;
@@ -33,7 +33,20 @@ export class AdaptableSqlService {
     const SQL =
       selectSql + fromSql + whereSql + groupBySql + orderBySql + limitSql;
 
-    console.log("QUERY", SQL);
+    return SQL;
+  }
+
+  public buildCountSql(
+    request: IServerSideGetRowsRequest,
+    filters?: ColumnFilterDef[],
+    queryAST?: any
+  ) {
+    const selectSql = "SELECT COUNT(*)";
+    const fromSql = ` FROM  ${this.tableName}`;
+    const whereSql = this.createAdaptableWhereSql(filters, queryAST);
+    const groupBySql = this.createGroupBySql(request);
+
+    const SQL = selectSql + fromSql + whereSql + groupBySql;
 
     return SQL;
   }
@@ -184,7 +197,7 @@ export class AdaptableSqlService {
           ? `${columnId} < ${inputs[0]}`
           : "";
       case "Positive":
-        return `${columnId} >= 0`;
+        return `${columnId} > 0`;
       case "Negative":
         return `${columnId} < 0`;
       case "Zero":
@@ -386,8 +399,8 @@ export class AdaptableSqlService {
   }
 
   private createOrderBySql(request: IServerSideGetRowsRequest) {
-    const rowGroupCols = request.rowGroupCols;
-    const groupKeys = request.groupKeys;
+    const rowGroupCols = request.rowGroupCols ?? [];
+    const groupKeys = request.groupKeys ?? [];
     const sortModel = request.sortModel;
 
     const grouping = this.isDoingGrouping(rowGroupCols, groupKeys);
@@ -418,7 +431,7 @@ export class AdaptableSqlService {
     // we are not doing grouping if at the lowest level. we are at the lowest level
     // if we are grouping by more columns than we have keys for (that means the user
     // has not expanded a lowest level group, OR we are not grouping at all).
-    return rowGroupCols.length > groupKeys.length;
+    return rowGroupCols?.length > groupKeys?.length;
   }
 
   private createLimitSql(request: IServerSideGetRowsRequest) {

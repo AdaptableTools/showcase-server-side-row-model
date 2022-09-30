@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { SqlCLient } from "./SqlCLient";
+import { SqlClient } from "./SqlClient";
 import importData from "./importData";
 
 importData();
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-const sqlClient = new SqlCLient("id", "olympic_winners");
+const sqlClient = new SqlClient("id", "olympic_winners");
 
 app.post("/api", function (req, res) {
   const { lastRow, rows } = sqlClient.getData(
