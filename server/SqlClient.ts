@@ -23,7 +23,8 @@ export class SqlClient {
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
     queryAST: any,
-    includeCount: boolean = false
+    includeCount: boolean = false,
+    includeSQL: boolean = false
   ) {
     const sql = this.sqlService.buildSql(request, filters, queryAST);
     const countSql = this.sqlService.buildCountSql(request, filters, queryAST);
@@ -35,6 +36,7 @@ export class SqlClient {
       rows: any[];
       lastRow: number;
       count?: number;
+      sql?: string;
     } = {
       rows: results,
       lastRow: lastRow,
@@ -42,8 +44,11 @@ export class SqlClient {
 
     if (includeCount) {
       const count = alasql(countSql);
-      console.log({ countSql });
       result["count"] = count[0]["COUNT(*)"] as number;
+    }
+
+    if (includeSQL) {
+      result["sql"] = sql;
     }
 
     return result;

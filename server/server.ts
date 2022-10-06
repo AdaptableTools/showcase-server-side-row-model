@@ -15,11 +15,27 @@ app.use(cors());
 const sqlClient = new SqlClient("id", "olympic_winners");
 
 app.post("/api", function (req, res) {
-  const { lastRow, rows } = sqlClient.getData(
+  const { lastRow, rows, sql, count } = sqlClient.getData(
     req.body,
-    req.body.adaptableFilters
+    req.body.adaptableFilters,
+    req.body.queryAST,
+    req.body.includeCount,
+    req.body.includeSQL
   );
-  res.json({ rows: rows, lastRow });
+
+  res.json({ rows: rows, lastRow, sql, count });
+});
+
+app.get("/api/permitted-values", function (req, res) {
+  if (!req.query.columnId) {
+    throw new Error("columnId is not defined");
+  }
+
+  const permittedValues = sqlClient.getPermittedValues(
+    req.query.columnId as string
+  );
+
+  res.json(permittedValues);
 });
 
 app.listen(4000, () => {

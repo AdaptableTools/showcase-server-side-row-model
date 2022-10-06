@@ -2,14 +2,16 @@
   "name": "AdaptableServerSideDemo",
   "version": "1.0.0",
   "scripts": {
-    "start:server": "cd server && npm run start",
-    "start:client": "cd client && npm run start",
-    "start": "concurrently --kill-others -n \"npm:start:server\" \"npm:start:client\""
+    "start:server": "npm run --prefix client start",
+    "start:client": "npm run --prefix server start",
+    "start": "concurrently  \"npm:start:server\" \"npm:start:client\""
   },
   "keywords": [],
   "author": "AdaptableTools",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^7.4.0"
+  },
   "repository": {
     "type": "git",
     "url": "ag-grid-server-side-demo"

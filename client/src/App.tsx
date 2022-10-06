@@ -3,73 +3,57 @@ import * as React from "react";
 import AdaptableReact, {
   AdaptableApi,
   AdaptableOptions,
+  BooleanFunctionName,
+  FilterPermittedValuesContext,
+  ModuleExpressionFunctionsContext,
 } from "@adaptabletools/adaptable-react-aggrid";
 
 // import agGrid Component
 import { AgGridReact } from "@ag-grid-community/react";
+import { ColDef, GridOptions, Module } from "@ag-grid-community/core";
+
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import { SideBarModule } from "@ag-grid-enterprise/side-bar";
+import { ColumnsToolPanelModule } from "@ag-grid-enterprise/column-tool-panel";
+import { FiltersToolPanelModule } from "@ag-grid-enterprise/filter-tool-panel";
+import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
+import { MenuModule } from "@ag-grid-enterprise/menu";
+import { RangeSelectionModule } from "@ag-grid-enterprise/range-selection";
+import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
+import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
+import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
+import { ClipboardModule } from "@ag-grid-enterprise/clipboard";
+import { ServerSideRowModelModule } from "@ag-grid-enterprise/server-side-row-model";
 
 // import adaptable css and themes
 import "@adaptabletools/adaptable-react-aggrid/base.css";
 import "@adaptabletools/adaptable-react-aggrid/themes/light.css";
 import "@adaptabletools/adaptable-react-aggrid/themes/dark.css";
 
-// import aggrid themes (using new Alpine theme)
-import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
-import "@ag-grid-community/all-modules/dist/styles/ag-theme-alpine.css";
-import "@ag-grid-community/all-modules/dist/styles/ag-theme-alpine-dark.css";
-
-import {
-  AllEnterpriseModules,
-  ColDef,
-  GridOptions,
-} from "@ag-grid-enterprise/all-modules";
+import "@ag-grid-community/core/dist/styles/ag-grid.css";
+import "@ag-grid-community/core/dist/styles/ag-theme-alpine-dark.css";
+import "@ag-grid-community/core/dist/styles/ag-theme-alpine.css";
+import "@ag-grid-community/core/dist/styles/ag-theme-balham-dark.css";
+import "@ag-grid-community/core/dist/styles/ag-theme-balham.css";
+import "@ag-grid-community/core/dist/styles/ag-theme-blue.css";
+import { createDataSource, getPermittedValues, updateRows } from "./DataSource";
 
 const LICENSE_KEY = process.env.REACT_APP_ADAPTABLE_LICENSE_KEY;
-const LOCAL = "http://localhost:4000/api";
-// const NETLIFY = "http://localhost:9999/.netlify/functions/athletes";
-const API_URL = process.env.REACT_APP_ADAPTABLE_API_PATH ?? LOCAL;
 
-const createDataSource = (adaptableApi: AdaptableApi) => ({
-  getRows(params: any) {
-    const filters = adaptableApi.filterApi
-      .getColumnFilters()
-      .map((columnFilter) => {
-        // TODO: replace when updated
-        const column = adaptableApi.columnApi.getColumnFromId(
-          columnFilter.ColumnId
-        );
-        const predicate = adaptableApi.predicateApi.getPredicateDefById(
-          columnFilter.Predicate.PredicateId
-        );
-        return {
-          predicate,
-          dataType: column?.dataType,
-          columnFilter: columnFilter,
-        };
-      });
-
-    const request = {
-      ...params.request,
-      adaptableFilters: filters,
-    };
-
-    fetch(API_URL, {
-      method: "post",
-      body: JSON.stringify(request),
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-    })
-      .then((httpResponse) => httpResponse.json())
-      .then((response) => {
-        params.success({
-          rowData: response.rows,
-          rowCount: response.lastRow ?? 0,
-        });
-      })
-      .catch((error) => {
-        params.fail();
-      });
-  },
-});
+const modules: Module[] = [
+  ClientSideRowModelModule,
+  SideBarModule,
+  ColumnsToolPanelModule,
+  FiltersToolPanelModule,
+  StatusBarModule,
+  MenuModule,
+  RangeSelectionModule,
+  RichSelectModule,
+  ExcelExportModule,
+  RowGroupingModule,
+  ClipboardModule,
+  ServerSideRowModelModule,
+];
 
 const columnDefs: ColDef[] = [
   { field: "id", hide: true, type: "abColDefString" },
@@ -89,20 +73,33 @@ const gridOptions: GridOptions = {
     floatingFilter: true,
     enableRowGroup: true,
   },
-  rowModelType: "serverSide",
+
   columnDefs: columnDefs,
   sideBar: ["adaptable", "columns", "filters"],
 
   // server side props
+  rowModelType: "serverSide",
   cacheBlockSize: 50,
   serverSideStoreType: "partial",
-  // serverSideDatasource: dataSource,
-
-  getRowId: (params) => {
-    // TODO: remove after next update
-    return params.data.id ?? Object.values(params.data)[0];
-  },
 };
+
+const supportedQueryBooleanOperators: BooleanFunctionName[] = [
+  "EQ",
+  "NEQ",
+  "GT",
+  "LT",
+  "GTE",
+  "LTE",
+  "AND",
+  "OR",
+  "NOT",
+  "BETWEEN",
+  "IN",
+  "IS_BLANK",
+  "CONTAINS",
+  "STARTS_WITH",
+  "ENDS_WITH",
+];
 
 const adaptableOptions: AdaptableOptions = {
   primaryKey: "id",
@@ -110,13 +107,65 @@ const adaptableOptions: AdaptableOptions = {
   licenseKey: LICENSE_KEY,
   adaptableId: "AdapTable ServerRowModel Demo",
   settingsPanelOptions: {},
+
   adaptableQLOptions: {
     expressionOptions: {
-      queryableColumns: ["country"],
+      moduleExpressionFunctions: (
+        context: ModuleExpressionFunctionsContext
+      ) => {
+        if (context.module === "Query") {
+          return {
+            systemBooleanFunctions: supportedQueryBooleanOperators,
+            systemScalarFunctions: ["COL"],
+            systemAggregatedBooleanFunctions: ["COL"],
+            systemAggregatedScalarFunctions: ["COL"],
+            systemObservableFunctions: ["COL"],
+          };
+        }
+        return;
+      },
     },
   },
+  dashboardOptions: {
+    customToolbars: [
+      {
+        name: "Update data",
+        toolbarButtons: [
+          {
+            label: "Update data",
+            onClick: (button, context) => {
+              updateRows(context.adaptableApi!);
+            },
+          },
+        ],
+      },
+    ],
+  },
+  userInterfaceOptions: {
+    filterPermittedValues: [
+      {
+        scope: {
+          All: true,
+        },
+        async values(context: FilterPermittedValuesContext) {
+          const columnId = context.column.columnId;
+          return getPermittedValues(columnId);
+        },
+      },
+    ],
+  },
   predefinedConfig: {
+    Dashboard: {
+      Revision: Date.now(),
+      Tabs: [
+        {
+          Name: "Main",
+          Toolbars: ["Query", "Update data", "SystemStatus"],
+        },
+      ],
+    },
     Layout: {
+      Revision: Date.now(),
       CurrentLayout: "All Columns Layout",
       Layouts: [
         {
@@ -126,23 +175,155 @@ const adaptableOptions: AdaptableOptions = {
         },
         {
           Name: "All Columns Layout",
+          ColumnSorts: [
+            {
+              ColumnId: "athlete",
+              SortOrder: "Asc",
+            },
+          ],
           Columns: [
             "athlete",
-            "country",
-            "sport",
-            "id",
-            "year",
             "gold",
             "silver",
             "bronze",
+            "totalMedals",
+            "country",
+            "sport",
+            "year",
           ],
+        },
+      ],
+    },
+    Query: {
+      Revision: Date.now(),
+      CurrentQuery: "[gold] > 1",
+    },
+    Alert: {
+      Revision: Date.now(),
+      AlertDefinitions: [
+        {
+          Scope: {
+            ColumnIds: ["gold"],
+          },
+          Rule: {
+            Predicate: {
+              PredicateId: "Any",
+            },
+          },
+          MessageType: "Success",
+          AlertProperties: {
+            DisplayNotification: true,
+            JumpToCell: true,
+            HighlightRow: true,
+          },
+          MessageText: "New Gold Win",
+          AlertForm: {
+            Buttons: [
+              {
+                Label: "Ok",
+                ButtonStyle: {
+                  variant: "raised",
+                },
+              },
+            ],
+          },
+        },
+        {
+          Scope: {
+            All: true,
+          },
+          Rule: {
+            ObservableExpression:
+              'GRID_CHANGE(COUNT([gold], 3), TIMEFRAME("24h"))',
+          },
+          MessageType: "Info",
+          AlertProperties: {
+            DisplayNotification: true,
+            JumpToCell: true,
+            HighlightRow: true,
+          },
+          MessageText: "Won 3 more Gold Medals",
+          AlertForm: {
+            Buttons: [
+              {
+                Label: "Ok",
+                ButtonStyle: {
+                  variant: "raised",
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+    CalculatedColumn: {
+      Revision: Date.now(),
+      CalculatedColumns: [
+        {
+          ColumnId: "totalMedals",
+          Query: {
+            ScalarExpression: "[gold] + [silver] + [bronze] ",
+          },
+          CalculatedColumnSettings: {
+            DataType: "Number",
+          },
+          FriendlyName: "Total Medals",
+        },
+      ],
+    },
+    FormatColumn: {
+      Revision: Date.now(),
+      FormatColumns: [
+        {
+          Scope: {
+            ColumnIds: ["athlete"],
+          },
+          Style: {
+            FontWeight: "Bold",
+          },
+        },
+        {
+          Scope: { All: true },
+          Style: {
+            BackColor: "#ffff00",
+          },
+          Rule: { BooleanExpression: "[gold] > 4" },
+        },
+      ],
+    },
+    StyledColumn: {
+      Revision: Date.now(),
+      StyledColumns: [
+        {
+          ColumnId: "gold",
+          GradientStyle: {
+            CellRanges: [{ Min: "Col-Min", Max: "Col-Max", Color: "#ffee2e" }],
+          },
+        },
+        {
+          ColumnId: "bronze",
+          GradientStyle: {
+            CellRanges: [{ Min: "Col-Min", Max: "Col-Max", Color: "#ff9500" }],
+          },
+        },
+        {
+          ColumnId: "silver",
+          GradientStyle: {
+            CellRanges: [{ Min: "Col-Min", Max: "Col-Max", Color: "#d3d3d3" }],
+          },
+        },
+        {
+          ColumnId: "totalMedals",
+          PercentBarStyle: {
+            CellRanges: [{ Min: "Col-Min", Max: "Col-Max", Color: "#006400" }],
+            CellText: ["CellValue"],
+            ToolTipText: ["CellValue"],
+          },
         },
       ],
     },
   },
 };
-
-const modules = AllEnterpriseModules;
 
 const App: React.FC = () => {
   return (
@@ -158,7 +339,6 @@ const App: React.FC = () => {
             );
           });
         }}
-        modules={modules}
       />
       <div className="ag-theme-alpine" style={{ flex: 1 }}>
         <AgGridReact gridOptions={gridOptions} modules={modules} />

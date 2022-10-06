@@ -80,11 +80,12 @@ export class AdaptableSqlService {
       return "";
     }
 
-    const whereParts = [];
-    whereParts.push(...this.buildFilterWhereParts(filters));
+    const whereParts = [...this.buildFilterWhereParts(filters)];
 
-    const astPart = this.buildQueryASTWherePart(queryAST);
-    astPart.length && whereParts.push(astPart);
+    if (queryAST) {
+      const astPart = this.buildQueryASTWherePart(queryAST);
+      astPart.length && whereParts.push(astPart);
+    }
 
     if (whereParts.length > 0) {
       return " where " + whereParts.join(" and ");
@@ -350,7 +351,7 @@ export class AdaptableSqlService {
         `
           : "";
 
-      // TODO: remove from options
+      // not supported
       case "LastWorkDay":
       case "NextWorkDay":
         // not implemented
@@ -466,7 +467,7 @@ export class AdaptableSqlService {
         .join(" ");
     }
 
-    const args = queryAST.args.map((n: any) => this.buildQueryASTWherePart(n));
+    const args = queryAST?.args.map((n: any) => this.buildQueryASTWherePart(n));
     switch (queryAST.type) {
       case "COL":
         const [colName] = queryAST.args;
@@ -499,7 +500,9 @@ export class AdaptableSqlService {
       case "IS_BLANK":
         return `${args[0]} IS NULL`;
       case "CONTAINS":
-        return `${args[0]} LIKE '%${args[1]}%'`;
+        // must remove string quotations
+        const testStr = args[1]?.replace(/["']/g, "");
+        return `${args[0]} LIKE '%${testStr}%'`;
       case "STARTS_WITH":
         return `${args[0]} LIKE '${args[1]}%'`;
       case "ENDS_WITH":

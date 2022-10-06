@@ -54,7 +54,8 @@ export const handler: Handler = async (event, context) => {
       body,
       body.adaptableFilters,
       body.queryAST,
-      body.includeCount
+      body.includeCount,
+      body.includeSQL
     );
 
     return {

@@ -13,10 +13,8 @@ In particular the demo shows how you can still leveraage 3 key features in AdapT
 ## Usage
 
 - Clone the project
-- run `npm install`
+- run `npm install` in root, client and server folders
 - start with `npm start`
-
-
 
 ## Licences
 
