@@ -2,8 +2,8 @@
   "name": "AdaptableServerSideDemo",
   "version": "1.0.0",
   "scripts": {
-    "start:server": "npm run --prefix client start",
-    "start:client": "npm run --prefix server start",
+    "start:server": "npm run --prefix server start",
+    "start:client": "npm run --prefix client start",
     "start": "concurrently  \"npm:start:server\" \"npm:start:client\""
   },
   "keywords": [],

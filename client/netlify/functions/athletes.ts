@@ -27,7 +27,7 @@ export const handler: Handler = async (event, context) => {
   }
 
   if (event.httpMethod === "GET" && event.path.includes("/permitted-values")) {
-    if (!event.queryStringParameters.columnId) {
+    if (!event.queryStringParameters?.columnId) {
       throw new Error("columnId is not defined");
     }
     const permittedValues = await sqlClient.getPermittedValues(

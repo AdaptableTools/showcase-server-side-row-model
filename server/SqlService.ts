@@ -1,6 +1,7 @@
-import { ColumnVO } from "@ag-grid-community/all-modules";
+import { ColumnVO, SortModelItem } from "@ag-grid-community/all-modules";
 import { IServerSideGetRowsRequest } from "@ag-grid-community/core";
 import { AdaptablePredicateDef, ColumnFilter } from "@adaptabletools/adaptable";
+import { countriesInEurope } from "./data/countriesInEurope";
 
 export interface ColumnFilterDef {
   dataType: "String" | "Number" | "Date" | "Boolean";
@@ -100,7 +101,12 @@ export class AdaptableSqlService {
     }
     const whereParts = [];
     for (const filter of filters) {
-      if (filter.dataType === "String") {
+      if (this.isCustomAdaptableFilter(filter)) {
+        const wherePart = this.createAdaptableCustomFilterSql(
+          filter.columnFilter
+        );
+        wherePart.length && whereParts.push(wherePart);
+      } else if (filter.dataType === "String") {
         const wherePart = this.createAdaptableTextFilterSql(
           filter.columnFilter
         );
@@ -382,6 +388,19 @@ export class AdaptableSqlService {
     return "";
   }
 
+  private isCustomAdaptableFilter(filterDef: ColumnFilterDef) {
+    const customFilterIds = ["superstar"];
+    return customFilterIds.includes(filterDef.predicate.id);
+  }
+
+  private createAdaptableCustomFilterSql(columnFilter: ColumnFilter) {
+    if (columnFilter.Predicate.PredicateId === "superstar") {
+      return `gold > 3 OR (gold + silver + bronze) > 3`;
+    }
+
+    return "";
+  }
+
   private createGroupBySql(request: IServerSideGetRowsRequest) {
     const rowGroupCols = request.rowGroupCols;
     const groupKeys = request.groupKeys;
@@ -402,7 +421,8 @@ export class AdaptableSqlService {
   private createOrderBySql(request: IServerSideGetRowsRequest) {
     const rowGroupCols = request.rowGroupCols ?? [];
     const groupKeys = request.groupKeys ?? [];
-    const sortModel = request.sortModel;
+    const sortModel: (SortModelItem & { sortedValues?: string[] })[] =
+      request.sortModel;
 
     const grouping = this.isDoingGrouping(rowGroupCols, groupKeys);
 
@@ -415,6 +435,14 @@ export class AdaptableSqlService {
       sortModel.forEach(function (item) {
         if (grouping && groupColIds.indexOf(item.colId) < 0) {
           // ignore
+        } else if (item.sortedValues) {
+          // sort by values
+          // sort is defined in width adaptable custom sort
+          sortParts.push(
+            `CASE ${item.colId} ${item.sortedValues
+              .map((value, index) => `WHEN "${value}" THEN '${index}'`)
+              .join(" ")} ELSE ${item.colId} END ${item.sort}`
+          );
         } else {
           sortParts.push(item.colId + " " + item.sort);
         }
@@ -468,6 +496,7 @@ export class AdaptableSqlService {
     }
 
     const args = queryAST?.args.map((n: any) => this.buildQueryASTWherePart(n));
+
     switch (queryAST.type) {
       case "COL":
         const [colName] = queryAST.args;
@@ -507,6 +536,13 @@ export class AdaptableSqlService {
         return `${args[0]} LIKE '${args[1]}%'`;
       case "ENDS_WITH":
         return `${args[0]} LIKE '%${args[1]}'`;
+      case "FROM_EUROPE":
+        // this is a custom expression function
+        return countriesInEurope
+          .map(({ country }: { country: string }) => {
+            return `country = "${country}"`;
+          })
+          .join(" OR ");
     }
 
     return "";
