@@ -37,6 +37,36 @@ export class AdaptableSqlService {
     return SQL;
   }
 
+  public createPivotSql(
+    request: IServerSideGetRowsRequest,
+    filters?: ColumnFilterDef[],
+    queryAST?: any
+  ) {
+    const [firstRowGroupCol] = request.rowGroupCols;
+    const [firstValueCol] = request.valueCols;
+    const [firstPivotCol] = request.pivotCols;
+    const orderBySql = this.createOrderBySql(request);
+
+    return `
+      SELECT 
+        ${firstRowGroupCol.id}, 
+        ${firstPivotCol.id}, ${firstValueCol.id}
+      FROM olympic_winners 
+      PIVOT (SUM([${firstValueCol.id}]) FOR ${firstPivotCol.id})
+      ${orderBySql};
+    `;
+  }
+
+  public createPivotFieldsSql(request: IServerSideGetRowsRequest) {
+    const [firstPivotCol] = request.pivotCols;
+
+    return `
+      SELECT 
+        DISTINCT ${firstPivotCol.id}
+      FROM olympic_winners 
+      ORDER BY ${firstPivotCol.id};`;
+  }
+
   public buildCountSql(
     request: IServerSideGetRowsRequest,
     filters?: ColumnFilterDef[],

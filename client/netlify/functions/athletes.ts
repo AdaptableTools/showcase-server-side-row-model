@@ -7,8 +7,6 @@ import olympicdata from "../../../server/data/olympic_winners.txt";
 
 alasql(olympicdata);
 
-const sqlClient = new SqlClient("Id", "olympic_winners");
-
 const corsHeaders = {
   "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
   "Access-Control-Allow-Origin": "*",
@@ -17,6 +15,8 @@ const corsHeaders = {
 };
 
 export const handler: Handler = async (event, context) => {
+  const sqlClient = new SqlClient("Id", "olympic_winners");
+
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,

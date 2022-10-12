@@ -26,9 +26,33 @@ export class SqlClient {
     includeCount: boolean = false,
     includeSQL: boolean = false
   ) {
-    const sql = this.sqlService.buildSql(request, filters, queryAST);
-    const countSql = this.sqlService.buildCountSql(request, filters, queryAST);
+    if (request.pivotMode) {
+      return this.requestPivotData(
+        request,
+        filters,
+        queryAST,
+        includeCount,
+        includeSQL
+      );
+    } else {
+      return this.requestData(
+        request,
+        filters,
+        queryAST,
+        includeCount,
+        includeSQL
+      );
+    }
+  }
 
+  requestData(
+    request: IServerSideGetRowsRequest,
+    filters: ColumnFilterDef[],
+    queryAST: any,
+    includeCount: boolean = false,
+    includeSQL: boolean = false
+  ) {
+    const sql = this.sqlService.buildSql(request, filters, queryAST);
     const results = alasql(sql);
     const lastRow = this.getRowCount(request, results);
 
@@ -43,6 +67,11 @@ export class SqlClient {
     };
 
     if (includeCount) {
+      const countSql = this.sqlService.buildCountSql(
+        request,
+        filters,
+        queryAST
+      );
       const count = alasql(countSql);
       result["count"] = count[0]["COUNT(*)"] as number;
     }
@@ -50,6 +79,52 @@ export class SqlClient {
     if (includeSQL) {
       result["sql"] = sql;
     }
+
+    return result;
+  }
+
+  async requestPivotData(
+    request: IServerSideGetRowsRequest,
+    filters: ColumnFilterDef[],
+    queryAST: any,
+    includeCount: boolean = false,
+    includeSQL: boolean = false
+  ) {
+    // alaqsl has a bug when pivoting, on the third request it fails
+    // https://github.com/AlaSQL/alasql/issues/490#issuecomment-319905922
+    try {
+      // @ts-ignore
+      alasql.databases.alasql.resetSqlCache();
+      // @ts-ignore
+      alasql.databases.dbo.resetSqlCache();
+    } catch (e) {
+      console.log("Failed to reset cache", e);
+    }
+
+    const resultsSql = this.sqlService.createPivotSql(
+      request,
+      filters,
+      queryAST
+    );
+    const results = await alasql(resultsSql);
+    const pivotFieldsSql = this.sqlService.createPivotFieldsSql(request);
+    const pivotFields: any[] = alasql(pivotFieldsSql);
+
+    const result: {
+      rows: any[];
+      lastRow: number;
+      count?: number;
+      sql?: string;
+      pivotFields?: any[];
+    } = {
+      rows: results,
+      // loading all the pivoted data in one go
+      lastRow: results.length,
+      pivotFields,
+      sql: resultsSql,
+    };
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return result;
   }

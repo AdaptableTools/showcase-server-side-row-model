@@ -14,8 +14,8 @@ app.use(cors());
 
 const sqlClient = new SqlClient("id", "olympic_winners");
 
-app.post("/api", function (req, res) {
-  const { lastRow, rows, sql, count } = sqlClient.getData(
+app.post("/api", async function (req, res) {
+  const data = await sqlClient.getData(
     req.body,
     req.body.adaptableFilters,
     req.body.queryAST,
@@ -23,7 +23,7 @@ app.post("/api", function (req, res) {
     req.body.includeSQL
   );
 
-  res.json({ rows: rows, lastRow, sql, count });
+  res.json(data);
 });
 
 app.get("/api/permitted-values", function (req, res) {
