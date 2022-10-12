@@ -106,7 +106,12 @@ export class SqlClient {
       filters,
       queryAST
     );
-    const results = await alasql(resultsSql);
+    // pivot results must have unique ids
+    const results = await alasql(resultsSql).map((item, index) => ({
+      ...item,
+      id: `${index}`,
+    }));
+    const paginatedResults = results.slice(request.startRow!, request.endRow!);
     const pivotFieldsSql = this.sqlService.createPivotFieldsSql(request);
     const pivotFields: any[] = alasql(pivotFieldsSql);
 
@@ -117,8 +122,7 @@ export class SqlClient {
       sql?: string;
       pivotFields?: any[];
     } = {
-      rows: results,
-      // loading all the pivoted data in one go
+      rows: paginatedResults,
       lastRow: results.length,
       pivotFields,
       sql: resultsSql,
