@@ -2,6 +2,10 @@ import { IServerSideGetRowsRequest } from "@ag-grid-community/all-modules";
 import alasql from "alasql";
 import { AdaptableSqlService, ColumnFilterDef } from "./SqlService";
 
+/**
+ * Creates SQL queries with the help of SqlService.
+ * Executes the SQL against ALASQL.
+ */
 export class SqlClient {
   sqlService: AdaptableSqlService;
   tableName: string;
@@ -107,10 +111,12 @@ export class SqlClient {
       queryAST
     );
     // pivot results must have unique ids
-    const results = await alasql(resultsSql).map((item, index) => ({
-      ...item,
-      id: `${index}`,
-    }));
+    const results = await alasql(resultsSql).map(
+      (item: any, index: number) => ({
+        ...item,
+        id: `${index}`,
+      })
+    );
     const paginatedResults = results.slice(request.startRow!, request.endRow!);
     const pivotFieldsSql = this.sqlService.createPivotFieldsSql(request);
     const pivotFields: any[] = alasql(pivotFieldsSql);

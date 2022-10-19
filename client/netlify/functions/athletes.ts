@@ -4,7 +4,6 @@ import { SqlClient } from "../../../server/SqlClient";
 
 // @ts-ignore
 import olympicdata from "../../../server/data/olympic_winners.txt";
-
 alasql(olympicdata);
 
 const corsHeaders = {
@@ -14,6 +13,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "content-type",
 };
 
+/**
+ * This serverless function is used:
+ * - adaptable docs demo
+ * - this client app is published, and it uses this function to get data
+ */
 export const handler: Handler = async (event, context) => {
   const sqlClient = new SqlClient("Id", "olympic_winners");
 
