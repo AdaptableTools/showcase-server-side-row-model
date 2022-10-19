@@ -104,6 +104,7 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
 
 const adaptableOptions: AdaptableOptions = {
   primaryKey: "id",
+  licenseKey: LICENSE_KEY,
   userName: "Server-side Demo",
   adaptableId: "Server Side Row Model",
   settingsPanelOptions: {
