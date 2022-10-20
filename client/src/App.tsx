@@ -111,8 +111,48 @@ const DescriptionComponent = () => {
           This example shows AdapTable using the AG Grid{" "}
           <b>Serverside Row Model</b>
         </li>
-        <li>The data is the same as which AG Grid uses for its demos</li>
+        <li>
+          The data is the same as which AG Grid uses for its{" "}
+          <a
+            href="https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/"
+            target="_blank"
+          >
+            nodejs demo
+          </a>
+        </li>
         <li>This allows us to illustrate what is and is not available</li>
+        <li>
+          The full source code for the demo is{" "}
+          <a
+            href="https://github.com/AdaptableTools/showcase-server-side-row-model"
+            target="_blank"
+          >
+            https://github.com/AdaptableTools/showcase-server-side-row-model
+          </a>
+        </li>
+        <li>
+          Note how we create a{" "}
+          <a
+            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
+            target="_blank"
+          >
+            SQLService
+          </a>{" "}
+          to mimic AdapTableQL and evaluate{" "}
+          <a
+            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
+            target="_blank"
+          >
+            Filters
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L508"
+            target="_blank"
+          >
+            Expressions / Queries
+          </a>
+        </li>
       </ul>
       <h4>Predefined Config</h4>
       <p>
