@@ -102,57 +102,55 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
   "ENDS_WITH",
 ];
 
+const DescriptionComponent = () => {
+  return (
+    <>
+      <h3>About this Demo</h3>
+      <ul>
+        <li>
+          This example shows AdapTable using the AG Grid{" "}
+          <b>Serverside Row Model</b>
+        </li>
+        <li>The data is the same as which AG Grid uses for its demos</li>
+        <li>This allows us to illustrate what is and is not available</li>
+      </ul>
+      <h4>Predefined Config</h4>
+      <p>
+        Many AdapTable Objects have been provided in Predefined Config
+        including:
+      </p>
+      <ul>
+        <li>
+          <b>Dashboard</b>: 2 Tabs:
+          <ul>
+            <li>
+              <i>Main</i>: Layout and Query Toolbars
+            </li>
+            <li>
+              <i>Data</i>: Alert, System Status, and a Custom (
+              <code>Data Loading</code>) Toolbar
+            </li>
+            <li>
+              The Custom Toolbar allows you to mimic data changes (so that
+              Alerts can be triggered)
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </>
+  );
+};
+
 const adaptableOptions: AdaptableOptions = {
   primaryKey: "id",
   licenseKey: LICENSE_KEY,
-  userName: "Server-side Demo",
-  adaptableId: "Server Side Row Model",
+  userName: "Server-side Demo User",
+  adaptableId: "AdapTable using Server-Side Row Model",
   settingsPanelOptions: {
     customSettingsPanels: [
       {
         name: "Using Serverside Row Model",
-        frameworkComponent: () => {
-          return (
-            <>
-              <h3>About this Demo</h3>
-              <ul>
-                <li>
-                  This example shows AdapTable using the AG Grid{" "}
-                  <b>Serverside Row Model</b>
-                </li>
-                <li>
-                  The data is the same as which AG Grid uses for its demos
-                </li>
-                <li>
-                  This allows us to illustrate what is and is not available
-                </li>
-              </ul>
-              <h4>Predefined Config</h4>
-              <p>
-                Many AdapTable Objects have been provided in Predefined Config
-                including:
-              </p>
-              <ul>
-                <li>
-                  <b>Dashboard</b>: 2 Tabs:
-                  <ul>
-                    <li>
-                      <i>Main</i>: Layout and Query Toolbars
-                    </li>
-                    <li>
-                      <i>Data</i>: Alert, System Status, and a Custom (
-                      <code>Data Loading</code>) Toolbar
-                    </li>
-                    <li>
-                      The Custom Toolbar allows you to mimic data changes (so
-                      that Alerts can be triggered)
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </>
-          );
-        },
+        frameworkComponent: DescriptionComponent,
       },
     ],
     navigation: {
