@@ -4,7 +4,7 @@ This small application is designed to demonstrate how to use AG Grid's [ServerRo
 
 It is based on AG Grid's own [nodejs example](https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/) and uses the same data source.
 
-In particular the demo shows how you can still leveraage 3 key features in AdapTable while using the Server Side Row Model:
+In particular the demo shows how you can still leverage 3 key features in AdapTable while using the Server Side Row Model:
 
 - [Getting Distinct Column Values](https://docs.adaptabletools.com/guide/dev-guide-tutorial-column-values)
 - [Evaluating Predicates](https://docs.adaptabletools.com/guide/adaptable-ql-predicate) (primarily used in Filters)
