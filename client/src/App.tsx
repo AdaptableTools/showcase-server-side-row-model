@@ -131,14 +131,14 @@ const DescriptionComponent = () => {
           </a>
         </li>
         <li>
-          Note how we create a{" "}
+          We create a{" "}
           <a
             href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
             target="_blank"
           >
             SQLService
           </a>{" "}
-          to mimic AdapTableQL and evaluate{" "}
+          to mimic how AdapTableQL evaluates{" "}
           <a
             href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
             target="_blank"
@@ -150,7 +150,7 @@ const DescriptionComponent = () => {
             href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L508"
             target="_blank"
           >
-            Expressions / Queries
+            Expressions
           </a>
         </li>
       </ul>
