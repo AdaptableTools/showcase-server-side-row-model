@@ -104,7 +104,7 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
 
 const DescriptionComponent = () => {
   return (
-    <>
+    <div style={{ fontSize: "smaller" }}>
       <h3>About this Demo</h3>
       <ul>
         <li>
@@ -137,7 +137,7 @@ const DescriptionComponent = () => {
           </ul>
         </li>
       </ul>
-    </>
+    </div>
   );
 };
 
