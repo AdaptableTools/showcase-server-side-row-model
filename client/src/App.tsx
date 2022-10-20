@@ -122,12 +122,12 @@ const DescriptionComponent = () => {
         </li>
         <li>This allows us to illustrate what is and is not available</li>
         <li>
-          The full source code for the demo is{" "}
+          The full source code for this demo is{" "}
           <a
             href="https://github.com/AdaptableTools/showcase-server-side-row-model"
             target="_blank"
           >
-            https://github.com/AdaptableTools/showcase-server-side-row-model
+            here
           </a>
         </li>
         <li>
@@ -154,6 +154,10 @@ const DescriptionComponent = () => {
           </a>
         </li>
       </ul>
+      <p>
+        Note: The code provided here is "rough and ready" for demonstration
+        purposes only - it should <b>not</b> be used in a production system
+      </p>
       <h4>Predefined Config</h4>
       <p>
         Many AdapTable Objects have been provided in Predefined Config
