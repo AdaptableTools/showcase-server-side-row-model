@@ -1,14 +1,22 @@
-# Adaptable Server-Side Node.js Example
+# AdapTable Server-Side Row Model Demo
 
-This small application is designed to demonstrate how to use AG Grid's [ServerRowModel](https://www.ag-grid.com/javascript-data-grid/server-side-model/) inside [AdapTable](https://www.adaptabletools.com/).
+This small application is designed to demonstrate how to use AG Grid's [Server-Side RowModel](https://www.ag-grid.com/javascript-data-grid/server-side-model/) inside [AdapTable](https://www.adaptabletools.com/).
 
 It is based on AG Grid's own [nodejs example](https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/) and uses the same data source.
 
-In particular the demo shows how you can still leverage 3 key features in AdapTable while using the Server Side Row Model:
+In particular the demo shows how - with very little custom code - you are able to leverage key features in AdapTable while using the Server-Side Row Model including:
 
-- [Getting Distinct Column Values](https://docs.adaptabletools.com/guide/dev-guide-tutorial-column-values)
 - [Evaluating Predicates](https://docs.adaptabletools.com/guide/adaptable-ql-predicate) (primarily used in Filters)
-- [Evaluating Expressions](https://docs.adaptabletools.com/guide/adaptable-ql-expression) (used extensively in AdapTable e.g. for Queries and Alerts)
+- [Evaluating Expressions](https://docs.adaptabletools.com/guide/adaptable-ql-expression) (used extensively in AdapTable e.g. for Queries, Alerts and Calculated Columns)
+- [Getting Distinct Column Values](https://docs.adaptabletools.com/guide/dev-guide-tutorial-column-values)
+- [Pivot Layouts](https://docs.adaptabletools.com/guide/handbook-layouts-pivot)
+- [Custom Sorts](https://docs.adaptabletools.com/guide/handbook-sorting-custom)
+
+Additionally, the example includes other features in AdapTable - which are available in Server-Side Row Model with **no** custom code required:
+
+- [Gradient Styles](https://docs.adaptabletools.com/guide/handbook-styled-column-gradient)
+- [Layouts](https://docs.adaptabletools.com/guide/handbook-layouts)
+- [Custom Toolbars](https://docs.adaptabletools.com/guide/ui-dashboard-custom-toolbars)
 
 ## Usage
 
