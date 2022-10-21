@@ -120,67 +120,13 @@ const DescriptionComponent = () => {
             nodejs demo
           </a>
         </li>
-        <li>This allows us to illustrate what is and is not available</li>
-        <li>
-          The full source code for this demo is{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model"
-            target="_blank"
-          >
-            here
-          </a>
-        </li>
-        <li>
-          We create a{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
-            target="_blank"
-          >
-            SQLService
-          </a>{" "}
-          to mimic how AdapTableQL evaluates{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
-            target="_blank"
-          >
-            Filters
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L508"
-            target="_blank"
-          >
-            Expressions
-          </a>
-        </li>
-      </ul>
-      <p>
-        Note: The code provided here is "rough and ready" for demonstration
-        purposes only - it should <b>not</b> be used in a production system
-      </p>
-
-      <h3>About this Demo</h3>
-      <ul>
-        <li>
-          This example shows AdapTable using the AG Grid{" "}
-          <b>Serverside Row Model</b>
-        </li>
-        <li>
-          The data is the same as which AG Grid uses for its{" "}
-          <a
-            href="https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/"
-            target="_blank"
-          >
-            nodejs demo
-          </a>
-        </li>
         <li>
           This allows us to illustrate what is and is not available when using
           this RowModel
         </li>
         <li>
           In particular it demonstrates how when using Server-Side Row Model you
-          can still:
+          can:
           <ul>
             <li>Evaluate Predicates</li>
             <li>
@@ -206,14 +152,17 @@ const DescriptionComponent = () => {
           </a>
         </li>
         <li>
-          We create a{" "}
+          We create a mock{" "}
           <a
             href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
             target="_blank"
           >
             SQLService
           </a>{" "}
-          to mimic how AdapTableQL evaluates{" "}
+          to mimic how AdapTableQL works{" "}
+        </li>
+        <li>
+          We use this service to evaluate both{" "}
           <a
             href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
             target="_blank"
@@ -227,6 +176,10 @@ const DescriptionComponent = () => {
           >
             Expressions
           </a>
+        </li>
+        <li>
+          We also use ExpressionOptions to limit which Expression Functions are
+          available
         </li>
       </ul>
       <p>
