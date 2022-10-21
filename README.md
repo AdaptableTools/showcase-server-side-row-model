@@ -12,7 +12,7 @@ In particular the demo shows how - with very little custom code - you are able t
 - [Pivot Layouts](https://docs.adaptabletools.com/guide/handbook-layouts-pivot)
 - [Custom Sorts](https://docs.adaptabletools.com/guide/handbook-sorting-custom)
 
-> **Note: This code is provided as a Starter Guide for demonstration purposes only - it is NOT production ready and should not be used as is**
+**Note: This code is provided as a Starter Guide for demonstration purposes only - it is NOT production ready and should not be used as is**
 
 Additionally, the example includes a small subset of the huge number of other features in AdapTable - which are available in Server-Side Row Model with **no** custom code required:
 
