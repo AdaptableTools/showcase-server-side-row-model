@@ -4,6 +4,8 @@ This small application demonstrates how to use AG Grid's [Server-Side RowModel](
 
 It is based on AG Grid's own [nodejs example](https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/) and uses the same data source.
 
+It is a copy of the demo example provided in [Adaptable Docs](https://docs.adaptabletools.com/guide/dev-guide-row-models-server)
+
 In particular the demo shows how - with very little custom code - you are able to leverage key features in AdapTable while using the Server-Side Row Model, including:
 
 - [Evaluating Predicates](https://docs.adaptabletools.com/guide/adaptable-ql-predicate) (primarily used in Filters)
@@ -12,7 +14,7 @@ In particular the demo shows how - with very little custom code - you are able t
 - [Pivot Layouts](https://docs.adaptabletools.com/guide/handbook-layouts-pivot)
 - [Custom Sorts](https://docs.adaptabletools.com/guide/handbook-sorting-custom)
 
-**Note: This code is provided as a Starter Guide for demonstration purposes only - it is NOT production ready and shouldn't be used as is**
+**Note: The code is provided as a Starter Guide for demonstration purposes only - it is NOT production ready and shouldn't be used as is**
 
 Additionally, the example includes a small subset of the huge number of other features in AdapTable - which are available in Server-Side Row Model with **no** custom code required:
 
