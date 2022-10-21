@@ -156,16 +156,19 @@ const DescriptionComponent = () => {
             href="https://github.com/AdaptableTools/showcase-server-side-row-model"
             target="_blank"
           >
-            here
+            in the Github repo
           </a>
-          . This includes source code for:
+          .
+        </li>
+        <li>
+          This includes the source code for:
           <ul>
             <li>
               <a
                 href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
                 target="_blank"
               >
-                SQLService
+                the mock SQLService
               </a>
             </li>
             <li>
@@ -173,7 +176,7 @@ const DescriptionComponent = () => {
                 href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
                 target="_blank"
               >
-                Filters
+                Filters Evaluation
               </a>
             </li>
             <li>
@@ -182,27 +185,31 @@ const DescriptionComponent = () => {
                 href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L508"
                 target="_blank"
               >
-                Expressions
+                Expressions Evaluation
               </a>
             </li>
           </ul>
         </li>
         <li>
-          <b>
-            Note: The code provided here is "rough and ready" for demonstration
-            purposes only - it should not be used in a production system
-          </b>
+          <p>
+            <b>
+              Note: The code provided here is "rough and ready" for
+              demonstration purposes only - it should not be used in a
+              production system
+            </b>
+          </p>
         </li>
       </ul>
 
       <h3>Predefined Config and AdapTable Options</h3>
       <p>
-        Many AdapTable Objects have been provided in Predefined Config
-        including:
+        Many AdapTable Objects and functions have been provided in Predefined
+        Config and AdapTable Options including:
       </p>
+      <h4>Dashboard</h4>
       <ul>
         <li>
-          <b>Dashboard</b>: 2 Tabs:
+          2 Tabs:
           <ul>
             <li>
               <i>Main</i>: Layout and Query Toolbars
@@ -211,11 +218,11 @@ const DescriptionComponent = () => {
               <i>Data</i>: Alert, System Status, and a Custom (
               <code>Data Loading</code>) Toolbar
             </li>
-            <li>
-              The Custom Toolbar allows you to mimic data changes (so that
-              Alerts can be triggered)
-            </li>
           </ul>
+          <li>
+            The Custom Toolbar allows you to mimic data changes (so that Alerts
+            can be triggered)
+          </li>
         </li>
       </ul>
     </div>
