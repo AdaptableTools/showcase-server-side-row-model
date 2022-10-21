@@ -138,6 +138,14 @@ const DescriptionComponent = () => {
             <li>Get Distinct Column Values</li>
           </ul>
         </li>
+        <li>
+          This is done using a mock SQLService which mimics how AdapTableQL
+          works - and which evaluates both Predicates and Expressions.
+        </li>
+        <li>
+          We also use ExpressionOptions to limit which Expression Functions are
+          available
+        </li>
       </ul>
 
       <h3>Source Code</h3>
@@ -150,44 +158,44 @@ const DescriptionComponent = () => {
           >
             here
           </a>
+          . This includes source code for:
+          <ul>
+            <li>
+              <a
+                href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
+                target="_blank"
+              >
+                SQLService
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
+                target="_blank"
+              >
+                Filters
+              </a>
+            </li>
+            <li>
+              {" "}
+              <a
+                href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L508"
+                target="_blank"
+              >
+                Expressions
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
-          We create a mock{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts"
-            target="_blank"
-          >
-            SQLService
-          </a>{" "}
-          to mimic how AdapTableQL works{" "}
-        </li>
-        <li>
-          We use this service to evaluate both{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L128"
-            target="_blank"
-          >
-            Filters
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/server/SqlService.ts#L508"
-            target="_blank"
-          >
-            Expressions
-          </a>
-        </li>
-        <li>
-          We also use ExpressionOptions to limit which Expression Functions are
-          available
+          <b>
+            Note: The code provided here is "rough and ready" for demonstration
+            purposes only - it should not be used in a production system
+          </b>
         </li>
       </ul>
-      <p>
-        Note: The code provided here is "rough and ready" for demonstration
-        purposes only - it should <b>not</b> be used in a production system
-      </p>
 
-      <h4>Predefined Config</h4>
+      <h3>Predefined Config and AdapTable Options</h3>
       <p>
         Many AdapTable Objects have been provided in Predefined Config
         including:
