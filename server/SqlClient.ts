@@ -1,10 +1,14 @@
+import { ColumnFilterDef } from "@adaptabletools/adaptable";
 import { IServerSideGetRowsRequest } from "@ag-grid-community/all-modules";
 import alasql from "alasql";
-import { AdaptableSqlService, ColumnFilterDef } from "./SqlService";
+import { AdaptableSqlService } from "./SqlService";
 
 /**
- * Creates SQL queries with the help of SqlService.
- * Executes the SQL against ALASQL.
+ * This is a service that abstracts away the details of how to get data from a SQL database.
+ * It creates an SQL string using the SqlService.
+ * It executes the SQL string using the alasql library https://github.com/AlaSQL/alasql.
+ *
+ * This is for demo purposes only. Do not use this in production.
  */
 export class SqlClient {
   sqlService: AdaptableSqlService;
@@ -17,12 +21,30 @@ export class SqlClient {
     this.primaryKey = primaryKey;
   }
 
+  /**
+   * Retrieves the possible distinct values for a column.
+   * It is used in the Values filter.
+   * https://docs.adaptabletools.com/guide/dev-guide-tutorial-column-values
+   *
+   * @param columnName column field name
+   * @returns SQL string;
+   */
   getPermittedValues(columnName: string): Promise<string[]> {
     const sql = `SELECT DISTINCT ${columnName} FROM olympic_winners`;
     const results = alasql(sql).map((result: any) => result[columnName]);
     return results;
   }
 
+  /**
+   * Retrieves data from the database using the Ag-Grid request, Adaptable filters and AdaptableQL.
+   *
+   * @param request AgGrid request
+   * @param filters Adaptable filters
+   * @param queryAST AdaptableQL AST
+   * @param includeCount whether to include the total number of rows
+   * @param includeSQL whether to include the SQL string in the response.
+   * @returns dataset
+   */
   getData(
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
@@ -49,6 +71,16 @@ export class SqlClient {
     }
   }
 
+  /**
+   * Handles the request for data when is in table mode.
+   *
+   * @param request AgGrid request
+   * @param filters Adaptable filters
+   * @param queryAST AdaptableQL AST
+   * @param includeCount whether to include the total number of rows
+   * @param includeSQL whether to include the SQL string in the response.
+   * @returns data
+   */
   requestData(
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
@@ -87,6 +119,17 @@ export class SqlClient {
     return result;
   }
 
+  /**
+   * Handles the request for data when is in pivot mode.
+   * This is more limited example than the table mode.
+   *
+   * @param request AgGrid request
+   * @param filters Adaptable filters
+   * @param queryAST AdaptableQL AST
+   * @param includeCount whether to include the total number of rows
+   * @param includeSQL whether to include the SQL string in the response.
+   * @returns data
+   */
   async requestPivotData(
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
@@ -139,6 +182,13 @@ export class SqlClient {
     return result;
   }
 
+  /**
+   * Calculates the row count
+   *
+   * @param request AgGrid request
+   * @param results dataset returned
+   * @returns row count
+   */
   getRowCount(request: IServerSideGetRowsRequest, results: any[]) {
     if (results === null || results === undefined || results.length === 0) {
       return 0;
@@ -147,6 +197,13 @@ export class SqlClient {
     return currentLastRow <= request.endRow! ? currentLastRow : -1;
   }
 
+  /**
+   * Makes sure the page is of the requested size.
+   *
+   * @param request AgGrid request
+   * @param results dataset returned
+   * @returns truncated dataset
+   */
   cutResultsToPageSize(request: IServerSideGetRowsRequest, results: any[]) {
     const pageSize = request.endRow! - request.startRow!;
     if (results && results.length > pageSize) {

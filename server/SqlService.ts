@@ -1,23 +1,32 @@
-import { ColumnVO, SortModelItem } from "@ag-grid-community/all-modules";
-import { IServerSideGetRowsRequest } from "@ag-grid-community/core";
-import { AdaptablePredicateDef, ColumnFilter } from "@adaptabletools/adaptable";
+import {
+  ColumnVO,
+  SortModelItem,
+  IServerSideGetRowsRequest,
+} from "@ag-grid-community/all-modules";
+import { ColumnFilter, ColumnFilterDef } from "@adaptabletools/adaptable";
 import { countriesInEurope } from "./data/countriesInEurope";
 
-export interface ColumnFilterDef {
-  dataType: "String" | "Number" | "Date" | "Boolean";
-  predicate: AdaptablePredicateDef;
-  columnFilter: ColumnFilter;
-}
-
 /**
- * Used to transform ag-grid request & adaptable filters into SQL queries.
+ * AdaptableSqlService is a service that transforms adaptable filters and AdaptableQL into SQL.
+ *
+ * This is only for demo purposes to demonstrate how Adaptable features can be implemented on the backend.
+ * It should not be used in production.
  */
 export class AdaptableSqlService {
   private tableName: string;
+
   constructor(tableName: string) {
     this.tableName = tableName;
   }
 
+  /**
+   * It builds an SQL string from ag-grid request object, adaptable filters and AdaptableQL.
+   *
+   * @param request Ag-Grid request object.
+   * @param filters Adaptable filters.
+   * @param queryAST AdaptableQL query as AST.
+   * @returns SQL string.
+   */
   public buildSql(
     request: IServerSideGetRowsRequest,
     filters?: ColumnFilterDef[],
@@ -37,6 +46,15 @@ export class AdaptableSqlService {
     return SQL;
   }
 
+  /**
+   * It builds an SQL string from ag-grid request object for pivoted data.
+   * This implementation takes into account the first pivot and value column.
+   *
+   * @param request Ag-Grid request object.
+   * @param filters Adaptable filters.
+   * @param queryAST AdaptableQL query as AST.
+   * @returns SQL string.
+   */
   public createPivotSql(
     request: IServerSideGetRowsRequest,
     filters?: ColumnFilterDef[],
@@ -67,6 +85,14 @@ export class AdaptableSqlService {
       ORDER BY ${firstPivotCol.id};`;
   }
 
+  /**
+   * It builds an SQL string that queries the database for the total number of rows.
+   *
+   * @param request Ag-Grid request object.
+   * @param filters Adaptable filters.
+   * @param queryAST AdaptableQL query as AST.
+   * @returns Sql string.
+   */
   public buildCountSql(
     request: IServerSideGetRowsRequest,
     filters?: ColumnFilterDef[],
@@ -82,6 +108,12 @@ export class AdaptableSqlService {
     return SQL;
   }
 
+  /**
+   * It constructs the SELECT part of the SQL query.
+   *
+   * @param request Ag-Grid request object.
+   * @returns Sql string.
+   */
   private createSelectSql(request: IServerSideGetRowsRequest) {
     const rowGroupCols = request.rowGroupCols;
     const valueCols = request.valueCols;
@@ -106,6 +138,14 @@ export class AdaptableSqlService {
     return `select *`;
   }
 
+  /**
+   * It constructs the filter (WHERE) part of the SQL query.
+   * It takes into account the Adaptable filters and AdaptableQL query.
+   *
+   * @param filters Adaptable filters.
+   * @param queryAST AdaptableQL query as AST.
+   * @returns Sql string.
+   */
   createAdaptableWhereSql(filters?: ColumnFilterDef[], queryAST?: any): string {
     if (!filters) {
       return "";
@@ -125,6 +165,12 @@ export class AdaptableSqlService {
     }
   }
 
+  /**
+   * Builds the WHERE part base on the Adaptable filters.
+   *
+   * @param filters Adaptable filters.
+   * @returns Sql string.
+   */
   private buildFilterWhereParts(filters?: ColumnFilterDef[]): string[] {
     if (!filters) {
       return [];
@@ -161,6 +207,12 @@ export class AdaptableSqlService {
     return whereParts;
   }
 
+  /**
+   * It creates the SQL part for filtering strings.
+   *
+   * @param columnFilter Adaptable column filter.
+   * @returns Sql string.
+   */
   createAdaptableTextFilterSql(columnFilter: ColumnFilter) {
     const columnId = columnFilter.ColumnId;
     const inputs = columnFilter.Predicate.Inputs ?? [];
@@ -202,6 +254,12 @@ export class AdaptableSqlService {
     return "";
   }
 
+  /**
+   * It creates the SQL part for filtering numbers.
+   *
+   * @param columnFilter Adaptable column filter.
+   * @returns Sql string.
+   */
   createAdaptableNumberFilterSql(columnFilter: ColumnFilter) {
     const columnId = columnFilter.ColumnId;
     const inputs = columnFilter.Predicate.Inputs ?? [];
@@ -278,6 +336,12 @@ export class AdaptableSqlService {
     }
   }
 
+  /**
+   * It creates the SQL part for filtering dates.
+   *
+   * @param columnFilter Adaptable column filter.
+   * @returns Sql string.
+   */
   private createAdaptableDateFilterSql(columnFilter: ColumnFilter) {
     const columnId = columnFilter.ColumnId;
     const inputs = columnFilter.Predicate.Inputs ?? [];
@@ -395,6 +459,12 @@ export class AdaptableSqlService {
     }
   }
 
+  /**
+   * It creates the SQL part for filtering booleans.
+   *
+   * @param columnFilter Adaptable column filter.
+   * @returns Sql string.
+   */
   createAdaptableBooleanFilterSql(columnFilter: ColumnFilter) {
     const columnId = columnFilter.ColumnId;
     const inputs = columnFilter.Predicate.Inputs ?? [];
@@ -418,19 +488,38 @@ export class AdaptableSqlService {
     return "";
   }
 
+  /**
+   * I checks if the column filter uses a custom predicate.
+   * A custom predicate is one that Adaptable does not ship with out of the box.
+   * https://docs.adaptabletools.com/guide/handbook-filtering-custom-filters
+   *
+   * @param columnFilter Adaptable column filter.
+   */
   private isCustomAdaptableFilter(filterDef: ColumnFilterDef) {
     const customFilterIds = ["superstar"];
     return customFilterIds.includes(filterDef.predicate.id);
   }
 
+  /**
+   * Handles the custom filter predicate 'superstar'.
+   * https://docs.adaptabletools.com/guide/handbook-filtering-custom-filters
+   *
+   * @param columnFilter Adaptable column filter.
+   * @returns
+   */
   private createAdaptableCustomFilterSql(columnFilter: ColumnFilter) {
     if (columnFilter.Predicate.PredicateId === "superstar") {
       return `gold > 3 OR (gold + silver + bronze) > 3`;
     }
-
     return "";
   }
 
+  /**
+   * Builds the SQL part for grouping.
+   *
+   * @param request Ag-Grid request.
+   * @returns SQL string.
+   */
   private createGroupBySql(request: IServerSideGetRowsRequest) {
     const rowGroupCols = request.rowGroupCols;
     const groupKeys = request.groupKeys;
@@ -448,6 +537,12 @@ export class AdaptableSqlService {
     }
   }
 
+  /**
+   * Builds the SQL part for ordering.
+   *
+   * @param request Ag-Grid request.
+   * @returns SQL string.
+   */
   private createOrderBySql(request: IServerSideGetRowsRequest) {
     const rowGroupCols = request.rowGroupCols ?? [];
     const groupKeys = request.groupKeys ?? [];
@@ -493,6 +588,12 @@ export class AdaptableSqlService {
     return rowGroupCols?.length > groupKeys?.length;
   }
 
+  /**
+   * Creates the SQL part for pagination.
+   *
+   * @param request Ag-Grid request.
+   * @returns SQL string.
+   */
   private createLimitSql(request: IServerSideGetRowsRequest) {
     const startRow = request.startRow ?? 0;
     const endRow = request.endRow;
@@ -505,6 +606,13 @@ export class AdaptableSqlService {
     return " limit " + (pageSize + 1) + " offset " + startRow;
   }
 
+  /**
+   * Creates the SQL filtering part for a subset of adaptable query predicates.
+   *
+   * https://docs.adaptabletools.com/guide/adaptable-ql-server-evaluation#using-the-ast
+   * @param queryAST AdaptableQL query AST.
+   * @returns Sql string.
+   */
   private buildQueryASTWherePart(queryAST?: any): string {
     if (typeof queryAST === undefined) {
       return "";
