@@ -194,7 +194,7 @@ const DescriptionComponent = () => {
           <p>
             <b>
               Note: The code provided here is "rough and ready" for
-              demonstration purposes only - it should not be used in a
+              demonstration purposes only - it should not be used "as is" in a
               production system
             </b>
           </p>
@@ -203,20 +203,20 @@ const DescriptionComponent = () => {
 
       <h3>Setting up the Demo</h3>
       <p>
-        Many AdapTable Objects and functions have been provided in
+        Many AdapTable Objects and functions have been provided to the Demo via{" "}
         <a
           href="https://docs.adaptabletools.com/guide/reference-config-overview"
           target="_blank"
         >
           Predefined Config
-        </a>
-        and
+        </a>{" "}
+        and{" "}
         <a
           href="https://docs.adaptabletools.com/guide/reference-options-overview"
           target="_blank"
         >
           AdapTable Options
-        </a>
+        </a>{" "}
         including:
       </p>
       <h4>Dashboard</h4>
@@ -234,10 +234,14 @@ const DescriptionComponent = () => {
             </li>
           </ul>
           <li>
-            The Custom Toolbar allows you to mimic data changes (so that Alerts
-            can be triggered)
+            The Custom Toolbar contains an "Update Data" button which allows you
+            to mimic data changes (so that Alerts can be triggered)
           </li>
         </li>
+      </ul>
+      <h4>Settings Panel</h4>
+      <ul>
+        <li>This Read Me page has been added as a Custom Settings Panel</li>
       </ul>
     </div>
   );
