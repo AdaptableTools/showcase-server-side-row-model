@@ -337,10 +337,6 @@ const adaptableOptions: AdaptableOptions = {
   },
   layoutOptions: {
     autoSizeColumnsInPivotLayout: true,
-    layoutTagOptions: {
-      autoGenerateTagsForLayouts: true,
-      autoCheckTagsForLayouts: true,
-    },
   },
   adaptableQLOptions: {
     customPredicateDefs: [
@@ -607,21 +603,18 @@ const adaptableOptions: AdaptableOptions = {
           GradientStyle: {
             CellRanges: [{ Min: 0, Max: 10, Color: "#ffee2e" }],
           },
-          Tags: ["Standard Layout", "Sorted Layout"],
         },
         {
           ColumnId: "bronze",
           GradientStyle: {
             CellRanges: [{ Min: 0, Max: 10, Color: "#ff9500" }],
           },
-          Tags: ["Standard Layout", "Sorted Layout"],
         },
         {
           ColumnId: "silver",
           GradientStyle: {
             CellRanges: [{ Min: 0, Max: 10, Color: "#d3d3d3" }],
           },
-          Tags: ["Standard Layout", "Sorted Layout"],
         },
       ],
     },
