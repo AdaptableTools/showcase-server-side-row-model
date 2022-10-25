@@ -201,10 +201,23 @@ const DescriptionComponent = () => {
         </li>
       </ul>
 
-      <h3>Predefined Config and AdapTable Options</h3>
+      <h3>Setting up the Demo</h3>
       <p>
-        Many AdapTable Objects and functions have been provided in Predefined
-        Config and AdapTable Options including:
+        Many AdapTable Objects and functions have been provided in
+        <a
+          href="https://docs.adaptabletools.com/guide/reference-config-overview"
+          target="_blank"
+        >
+          Predefined Config
+        </a>
+        and
+        <a
+          href="https://docs.adaptabletools.com/guide/reference-options-overview"
+          target="_blank"
+        >
+          AdapTable Options
+        </a>
+        including:
       </p>
       <h4>Dashboard</h4>
       <ul>
@@ -212,7 +225,8 @@ const DescriptionComponent = () => {
           2 Tabs:
           <ul>
             <li>
-              <i>Main</i>: Layout and Query Toolbars
+              <i>Main</i>: Layout and Query Toolbars, and a Custom Toolbar with
+              a 'READ ME' button
             </li>
             <li>
               <i>Data</i>: Alert, System Status, and a Custom (
