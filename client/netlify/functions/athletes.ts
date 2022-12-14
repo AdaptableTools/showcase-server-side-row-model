@@ -46,6 +46,19 @@ export const handler: Handler = async (event, context) => {
     };
   }
 
+  if (event.httpMethod === "GET") {
+    const data = (
+      await sqlClient.getData({ startRow: 0, endRow: 50 } as any, [])
+    ).rows;
+    return {
+      statusCode: 200,
+      body: JSON.stringify(data),
+      headers: {
+        ...corsHeaders,
+      },
+    };
+  }
+
   try {
     let body: any = {};
     if (!event.body) {

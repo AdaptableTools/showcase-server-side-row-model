@@ -48,7 +48,7 @@ export class SqlClient {
   getData(
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
-    queryAST: any,
+    queryAST?: any,
     includeCount: boolean = false,
     includeSQL: boolean = false
   ) {
