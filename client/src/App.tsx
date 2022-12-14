@@ -194,17 +194,30 @@ const DescriptionComponent = () => {
           <p>
             <b>
               Note: The code provided here is "rough and ready" for
-              demonstration purposes only - it should not be used in a
+              demonstration purposes only - it should not be used "as is" in a
               production system
             </b>
           </p>
         </li>
       </ul>
 
-      <h3>Predefined Config and AdapTable Options</h3>
+      <h3>Setting up the Demo</h3>
       <p>
-        Many AdapTable Objects and functions have been provided in Predefined
-        Config and AdapTable Options including:
+        Many AdapTable Objects and functions have been provided to the Demo via{" "}
+        <a
+          href="https://docs.adaptabletools.com/guide/reference-config-overview"
+          target="_blank"
+        >
+          Predefined Config
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://docs.adaptabletools.com/guide/reference-options-overview"
+          target="_blank"
+        >
+          AdapTable Options
+        </a>{" "}
+        including:
       </p>
       <h4>Dashboard</h4>
       <ul>
@@ -212,7 +225,8 @@ const DescriptionComponent = () => {
           2 Tabs:
           <ul>
             <li>
-              <i>Main</i>: Layout and Query Toolbars
+              <i>Main</i>: Layout and Query Toolbars, and a Custom Toolbar with
+              a 'READ ME' button
             </li>
             <li>
               <i>Data</i>: Alert, System Status, and a Custom (
@@ -220,10 +234,14 @@ const DescriptionComponent = () => {
             </li>
           </ul>
           <li>
-            The Custom Toolbar allows you to mimic data changes (so that Alerts
-            can be triggered)
+            The Custom Toolbar contains an "Update Data" button which allows you
+            to mimic data changes (so that Alerts can be triggered)
           </li>
         </li>
+      </ul>
+      <h4>Settings Panel</h4>
+      <ul>
+        <li>This Read Me page has been added as a Custom Settings Panel</li>
       </ul>
     </div>
   );
@@ -319,10 +337,6 @@ const adaptableOptions: AdaptableOptions = {
   },
   layoutOptions: {
     autoSizeColumnsInPivotLayout: true,
-    layoutTagOptions: {
-      autoGenerateTagsForLayouts: true,
-      autoCheckTagsForLayouts: true,
-    },
   },
   adaptableQLOptions: {
     customPredicateDefs: [
@@ -589,21 +603,18 @@ const adaptableOptions: AdaptableOptions = {
           GradientStyle: {
             CellRanges: [{ Min: 0, Max: 10, Color: "#ffee2e" }],
           },
-          Tags: ["Standard Layout", "Sorted Layout"],
         },
         {
           ColumnId: "bronze",
           GradientStyle: {
             CellRanges: [{ Min: 0, Max: 10, Color: "#ff9500" }],
           },
-          Tags: ["Standard Layout", "Sorted Layout"],
         },
         {
           ColumnId: "silver",
           GradientStyle: {
             CellRanges: [{ Min: 0, Max: 10, Color: "#d3d3d3" }],
           },
-          Tags: ["Standard Layout", "Sorted Layout"],
         },
       ],
     },

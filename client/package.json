@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@adaptabletools/adaptable-react-aggrid": "13.0.0",
+    "@adaptabletools/adaptable-react-aggrid": "13.0.4",
     "@ag-grid-community/core": "28.1.1",
     "@ag-grid-community/client-side-row-model": "28.1.1",
     "@ag-grid-enterprise/side-bar": "28.1.1",
