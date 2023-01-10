@@ -10,7 +10,7 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
     const filters = adaptableApi.filterApi.getColumnFilterDefs();
     const query = adaptableApi.queryApi.getCurrentQuery() ?? "";
     const queryAST = adaptableApi.queryLanguageApi.getASTForExpression(query);
-    const customSorts = adaptableApi.customSortApi.getAllActiveCustomSort();
+    const customSorts = adaptableApi.customSortApi.getActiveCustomSorts();
 
     const sortModel = params.request.sortModel.map((sort: any) => {
       const customSort = customSorts.find(

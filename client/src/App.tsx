@@ -6,7 +6,7 @@ import AdaptableReact, {
   BooleanFunctionName,
   CustomToolbarButtonContext,
   FilterPermittedValuesContext,
-  ModuleExpressionFunctionsContext,
+  ModuleExpressionFunctionsContext, ScalarFunctionName,
 } from "@adaptabletools/adaptable-react-aggrid";
 
 // import agGrid Component
@@ -96,7 +96,6 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
   "NOT",
   "BETWEEN",
   "IN",
-  "IS_BLANK",
   "CONTAINS",
   "STARTS_WITH",
   "ENDS_WITH",
@@ -357,7 +356,7 @@ const adaptableOptions: AdaptableOptions = {
         if (context.module === "Query") {
           return {
             systemBooleanFunctions: supportedQueryBooleanOperators,
-            systemScalarFunctions: ["COL"],
+            systemScalarFunctions: ["COL", "IS_BLANK"],
             customBooleanFunctions: {
               FROM_EUROPE: {
                 // handled on the server
@@ -482,9 +481,9 @@ const adaptableOptions: AdaptableOptions = {
             ColumnIds: ["gold"],
           },
           Rule: {
-            Predicate: {
+            Predicates: [{
               PredicateId: "Any",
-            },
+            }],
           },
           MessageType: "Success",
           AlertProperties: {

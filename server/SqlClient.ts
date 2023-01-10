@@ -1,5 +1,5 @@
 import { ColumnFilterDef } from "@adaptabletools/adaptable";
-import { IServerSideGetRowsRequest } from "@ag-grid-community/all-modules";
+import { IServerSideGetRowsRequest } from "@ag-grid-community/core";
 import alasql from "alasql";
 import { AdaptableSqlService } from "./SqlService";
 

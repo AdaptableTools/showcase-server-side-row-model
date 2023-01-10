@@ -2,7 +2,7 @@ import {
   ColumnVO,
   SortModelItem,
   IServerSideGetRowsRequest,
-} from "@ag-grid-community/all-modules";
+} from "@ag-grid-community/core";
 import { ColumnFilter, ColumnFilterDef } from "@adaptabletools/adaptable";
 import { countriesInEurope } from "./data/countriesInEurope";
 
