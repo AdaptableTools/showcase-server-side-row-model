@@ -23,8 +23,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@adaptabletools/adaptable": "14.0.2",
-    "@ag-grid-community/core": "28.2.1",
+    "@adaptabletools/adaptable": "15.0.0",
+    "@ag-grid-community/core": "29.0.0",
     "ts-node": "^10.9.1"
   }
 }
