@@ -6,38 +6,35 @@ import AdaptableReact, {
   BooleanFunctionName,
   CustomToolbarButtonContext,
   FilterPermittedValuesContext,
-  ModuleExpressionFunctionsContext, ScalarFunctionName,
+  ModuleExpressionFunctionsContext,
 } from "@adaptabletools/adaptable-react-aggrid";
 
 // import agGrid Component
-import { AgGridReact } from "@ag-grid-community/react";
-import { ColDef, GridOptions, Module } from "@ag-grid-community/core";
+import {AgGridReact} from "@ag-grid-community/react";
+import {ColDef, GridOptions, Module} from "@ag-grid-community/core";
 
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-import { SideBarModule } from "@ag-grid-enterprise/side-bar";
-import { ColumnsToolPanelModule } from "@ag-grid-enterprise/column-tool-panel";
-import { FiltersToolPanelModule } from "@ag-grid-enterprise/filter-tool-panel";
-import { StatusBarModule } from "@ag-grid-enterprise/status-bar";
-import { MenuModule } from "@ag-grid-enterprise/menu";
-import { RangeSelectionModule } from "@ag-grid-enterprise/range-selection";
-import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
-import { ExcelExportModule } from "@ag-grid-enterprise/excel-export";
-import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
-import { ClipboardModule } from "@ag-grid-enterprise/clipboard";
-import { ServerSideRowModelModule } from "@ag-grid-enterprise/server-side-row-model";
+import {ClientSideRowModelModule} from "@ag-grid-community/client-side-row-model";
+import {SideBarModule} from "@ag-grid-enterprise/side-bar";
+import {ColumnsToolPanelModule} from "@ag-grid-enterprise/column-tool-panel";
+import {FiltersToolPanelModule} from "@ag-grid-enterprise/filter-tool-panel";
+import {StatusBarModule} from "@ag-grid-enterprise/status-bar";
+import {MenuModule} from "@ag-grid-enterprise/menu";
+import {RangeSelectionModule} from "@ag-grid-enterprise/range-selection";
+import {RichSelectModule} from "@ag-grid-enterprise/rich-select";
+import {ExcelExportModule} from "@ag-grid-enterprise/excel-export";
+import {RowGroupingModule} from "@ag-grid-enterprise/row-grouping";
+import {ClipboardModule} from "@ag-grid-enterprise/clipboard";
+import {ServerSideRowModelModule} from "@ag-grid-enterprise/server-side-row-model";
 
 // import adaptable css and themes
 import "@adaptabletools/adaptable-react-aggrid/base.css";
 import "@adaptabletools/adaptable-react-aggrid/themes/light.css";
 import "@adaptabletools/adaptable-react-aggrid/themes/dark.css";
 
-import "@ag-grid-community/core/dist/styles/ag-grid.css";
-import "@ag-grid-community/core/dist/styles/ag-theme-alpine-dark.css";
-import "@ag-grid-community/core/dist/styles/ag-theme-alpine.css";
-import "@ag-grid-community/core/dist/styles/ag-theme-balham-dark.css";
-import "@ag-grid-community/core/dist/styles/ag-theme-balham.css";
-import "@ag-grid-community/core/dist/styles/ag-theme-blue.css";
-import { createDataSource, getPermittedValues, updateRows } from "./DataSource";
+import "@ag-grid-community/styles/ag-grid.css";
+import "@ag-grid-community/styles/ag-theme-alpine.css";
+import "@ag-grid-community/styles/ag-theme-balham.css";
+import {createDataSource, getPermittedValues} from "./DataSource";
 
 const LICENSE_KEY = process.env.REACT_APP_ADAPTABLE_LICENSE_KEY;
 
