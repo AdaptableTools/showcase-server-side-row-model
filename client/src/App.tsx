@@ -78,7 +78,7 @@ const gridOptions: GridOptions = {
   // server side props
   rowModelType: "serverSide",
   cacheBlockSize: 50,
-  serverSideStoreType: "partial",
+  suppressServerSideInfiniteScroll: true,
 };
 
 const supportedQueryBooleanOperators: BooleanFunctionName[] = [
