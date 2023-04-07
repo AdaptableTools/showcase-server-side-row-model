@@ -38,6 +38,23 @@ export class AdaptableSqlService {
   }
 
   /**
+   * It builds an SQL string for a Report.
+   *
+   * @param columnsIds list of columns which should be included in the report
+   * @param queryAST AdaptableQL query as AST (if the report is based on a query)
+   * @returns SQL string.
+   */
+  buildReportDataSql(columnIds: string[], reportQueryAST: any) {
+    const selectSql = columnIds.length ? 'select ' + columnIds.join(', ') : 'select *';
+    const fromSql = ` FROM  ${this.tableName}`;
+    const whereSql = this.createAdaptableWhereSql([], reportQueryAST);
+
+    const SQL = selectSql + fromSql + whereSql;
+
+    return SQL;
+  }
+
+  /**
    * It builds an SQL string from ag-grid request object for pivoted data.
    * This implementation takes into account the first pivot and value column.
    *

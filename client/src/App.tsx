@@ -7,7 +7,6 @@ import AdaptableReact, {
   CustomToolbarButtonContext,
   FilterPermittedValuesContext,
   ModuleExpressionFunctionsContext,
-  PreProcessExportContext,
 } from '@adaptabletools/adaptable-react-aggrid';
 
 // import agGrid Component
@@ -36,8 +35,7 @@ import '@ag-grid-community/styles/ag-grid.css';
 import '@ag-grid-community/styles/ag-theme-alpine.css';
 import '@ag-grid-community/styles/ag-theme-balham.css';
 import { createDataSource, getPermittedValues } from './DataSource';
-import { API_URL } from './environment';
-import { preProcessExport } from './preProcessExport';
+import { handleExport } from './handleExport';
 
 const LICENSE_KEY = process.env.REACT_APP_ADAPTABLE_LICENSE_KEY;
 
@@ -82,8 +80,7 @@ const gridOptions: GridOptions = {
 
   // server side props
   rowModelType: 'serverSide',
-  cacheBlockSize: 50,
-  suppressServerSideInfiniteScroll: true,
+  pagination: true,
 };
 
 const supportedQueryBooleanOperators: BooleanFunctionName[] = [
@@ -234,7 +231,7 @@ const adaptableOptions: AdaptableOptions = {
   userName: 'Server-side Demo User',
   adaptableId: 'AdapTable using Server-Side Row Model',
   exportOptions: {
-    preProcessExport: preProcessExport,
+    preProcessExport: handleExport,
   },
   settingsPanelOptions: {
     customSettingsPanels: [
@@ -376,11 +373,27 @@ const adaptableOptions: AdaptableOptions = {
       Tabs: [
         {
           Name: 'Main',
-          Toolbars: ['About', 'Layout', 'Query'],
+          Toolbars: ['About', 'Layout', 'Export', 'Query'],
         },
         {
           Name: 'Data',
           Toolbars: ['Alert', 'SystemStatus', 'UpdateData'],
+        },
+      ],
+    },
+    Export: {
+      Revision: Date.now(),
+      Reports: [
+        {
+          Name: 'US Golden Athletes',
+          ReportColumnScope: 'ScopeColumns',
+          Scope: {
+            ColumnIds: ['athlete', 'gold', 'sport', 'year'],
+          },
+          ReportRowScope: 'ExpressionRows',
+          Query: {
+            BooleanExpression: '[country]="United States" AND [gold]>0',
+          },
         },
       ],
     },

@@ -1,4 +1,9 @@
-import { ColumnFilterDef } from '@adaptabletools/adaptable';
+import {
+  AdaptableReportColumn,
+  ColumnFilterDef,
+  Report,
+  ReportData,
+} from '@adaptabletools/adaptable';
 import { IServerSideGetRowsRequest } from '@ag-grid-community/core';
 import alasql from 'alasql';
 import { AdaptableSqlService } from './SqlService';
@@ -57,6 +62,21 @@ export class SqlClient {
     } else {
       return this.requestData(request, filters, queryAST, includeCount, includeSQL);
     }
+  }
+
+  getReportData(report: Report, columns: AdaptableReportColumn[], reportQueryAST?: any) {
+    const columnFields = columns.map((column) => column.field || column.columnId);
+
+    const sql = this.sqlService.buildReportDataSql(columnFields, reportQueryAST);
+    const results = alasql(sql);
+
+    const reportData: ReportData = {
+      rows: results,
+      columns,
+      // @ts-ignore Add the generated SQL to the response for debugging purposes
+      sql,
+    };
+    return reportData;
   }
 
   /**

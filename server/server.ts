@@ -37,9 +37,12 @@ app.get('/api/permitted-values', function (req, res) {
 });
 
 app.post('/api/report', function (req, res) {
-  const permittedValues = sqlClient.getPermittedValues(req.query.columnId as string);
-
-  res.json(permittedValues);
+  const reportData = sqlClient.getReportData(
+    req.body.report,
+    req.body.reportColumns,
+    req.body.reportQueryAST
+  );
+  res.json(reportData);
 });
 
 app.listen(4000, () => {
