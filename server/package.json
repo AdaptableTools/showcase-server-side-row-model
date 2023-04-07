@@ -23,7 +23,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@adaptabletools/adaptable": "15.2.0-canary.1",
+    "@adaptabletools/adaptable": "15.2.0-canary.2",
     "@ag-grid-community/core": "29.2.0",
     "ts-node": "^10.9.1"
   }
