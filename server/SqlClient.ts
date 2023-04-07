@@ -1,7 +1,7 @@
-import { ColumnFilterDef } from "@adaptabletools/adaptable";
-import { IServerSideGetRowsRequest } from "@ag-grid-community/core";
-import alasql from "alasql";
-import { AdaptableSqlService } from "./SqlService";
+import { ColumnFilterDef } from '@adaptabletools/adaptable';
+import { IServerSideGetRowsRequest } from '@ag-grid-community/core';
+import alasql from 'alasql';
+import { AdaptableSqlService } from './SqlService';
 
 /**
  * This is a service that abstracts away the details of how to get data from a SQL database.
@@ -53,21 +53,9 @@ export class SqlClient {
     includeSQL: boolean = false
   ) {
     if (request.pivotMode) {
-      return this.requestPivotData(
-        request,
-        filters,
-        queryAST,
-        includeCount,
-        includeSQL
-      );
+      return this.requestPivotData(request, filters, queryAST, includeCount, includeSQL);
     } else {
-      return this.requestData(
-        request,
-        filters,
-        queryAST,
-        includeCount,
-        includeSQL
-      );
+      return this.requestData(request, filters, queryAST, includeCount, includeSQL);
     }
   }
 
@@ -103,17 +91,13 @@ export class SqlClient {
     };
 
     if (includeCount) {
-      const countSql = this.sqlService.buildCountSql(
-        request,
-        filters,
-        queryAST
-      );
+      const countSql = this.sqlService.buildCountSql(request, filters, queryAST);
       const count = alasql(countSql);
-      result["count"] = count[0]["COUNT(*)"] as number;
+      result['count'] = count[0]['COUNT(*)'] as number;
     }
 
     if (includeSQL) {
-      result["sql"] = sql;
+      result['sql'] = sql;
     }
 
     return result;
@@ -145,21 +129,15 @@ export class SqlClient {
       // @ts-ignore
       alasql.databases.dbo.resetSqlCache();
     } catch (e) {
-      console.log("Failed to reset cache", e);
+      console.log('Failed to reset cache', e);
     }
 
-    const resultsSql = this.sqlService.createPivotSql(
-      request,
-      filters,
-      queryAST
-    );
+    const resultsSql = this.sqlService.createPivotSql(request, filters, queryAST);
     // pivot results must have unique ids
-    const results = await alasql(resultsSql).map(
-      (item: any, index: number) => ({
-        ...item,
-        id: `${index}`,
-      })
-    );
+    const results = await alasql(resultsSql).map((item: any, index: number) => ({
+      ...item,
+      id: `${index}`,
+    }));
     const paginatedResults = results.slice(request.startRow!, request.endRow!);
     const pivotFieldsSql = this.sqlService.createPivotFieldsSql(request);
     const pivotFields: any[] = alasql(pivotFieldsSql);

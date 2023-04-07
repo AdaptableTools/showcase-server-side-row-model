@@ -4,13 +4,15 @@
   "scripts": {
     "start:server": "npm run --prefix server start",
     "start:client": "npm run --prefix client start",
-    "start": "concurrently  \"npm:start:server\" \"npm:start:client\""
+    "start": "concurrently  \"npm:start:server\" \"npm:start:client\"",
+    "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\""
   },
   "keywords": [],
   "author": "AdaptableTools",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^7.4.0"
+    "concurrently": "^7.4.0",
+    "prettier": "^2.8.7"
   },
   "repository": {
     "type": "git",

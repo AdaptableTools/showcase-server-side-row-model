@@ -1,10 +1,6 @@
-import {
-  ColumnVO,
-  SortModelItem,
-  IServerSideGetRowsRequest,
-} from "@ag-grid-community/core";
-import { ColumnFilter, ColumnFilterDef } from "@adaptabletools/adaptable";
-import { countriesInEurope } from "./data/countriesInEurope";
+import { ColumnVO, SortModelItem, IServerSideGetRowsRequest } from '@ag-grid-community/core';
+import { ColumnFilter, ColumnFilterDef } from '@adaptabletools/adaptable';
+import { countriesInEurope } from './data/countriesInEurope';
 
 /**
  * AdaptableSqlService is a service that transforms adaptable filters and AdaptableQL into SQL.
@@ -27,11 +23,7 @@ export class AdaptableSqlService {
    * @param queryAST AdaptableQL query as AST.
    * @returns SQL string.
    */
-  public buildSql(
-    request: IServerSideGetRowsRequest,
-    filters?: ColumnFilterDef[],
-    queryAST?: any
-  ) {
+  public buildSql(request: IServerSideGetRowsRequest, filters?: ColumnFilterDef[], queryAST?: any) {
     const selectSql = this.createSelectSql(request);
     const fromSql = ` FROM  ${this.tableName}`;
     const whereSql = this.createAdaptableWhereSql(filters, queryAST);
@@ -40,8 +32,7 @@ export class AdaptableSqlService {
     const orderBySql = this.createOrderBySql(request);
     const groupBySql = this.createGroupBySql(request);
 
-    const SQL =
-      selectSql + fromSql + whereSql + groupBySql + orderBySql + limitSql;
+    const SQL = selectSql + fromSql + whereSql + groupBySql + orderBySql + limitSql;
 
     return SQL;
   }
@@ -98,7 +89,7 @@ export class AdaptableSqlService {
     filters?: ColumnFilterDef[],
     queryAST?: any
   ) {
-    const selectSql = "SELECT COUNT(*)";
+    const selectSql = 'SELECT COUNT(*)';
     const fromSql = ` FROM  ${this.tableName}`;
     const whereSql = this.createAdaptableWhereSql(filters, queryAST);
     const groupBySql = this.createGroupBySql(request);
@@ -123,16 +114,14 @@ export class AdaptableSqlService {
       const colsToSelect: string[] = [];
 
       const rowGroupCol = rowGroupCols[groupKeys.length];
-      if (typeof rowGroupCol.field === "string") {
+      if (typeof rowGroupCol.field === 'string') {
         colsToSelect.push(rowGroupCol.field);
       }
       valueCols.forEach(function (valueCol) {
-        colsToSelect.push(
-          valueCol.aggFunc + "(" + valueCol.field + ") as " + valueCol.field
-        );
+        colsToSelect.push(valueCol.aggFunc + '(' + valueCol.field + ') as ' + valueCol.field);
       });
 
-      return "select " + colsToSelect.join(", ");
+      return 'select ' + colsToSelect.join(', ');
     }
 
     return `select *`;
@@ -148,7 +137,7 @@ export class AdaptableSqlService {
    */
   createAdaptableWhereSql(filters?: ColumnFilterDef[], queryAST?: any): string {
     if (!filters) {
-      return "";
+      return '';
     }
 
     const whereParts = [...this.buildFilterWhereParts(filters)];
@@ -159,9 +148,9 @@ export class AdaptableSqlService {
     }
 
     if (whereParts.length > 0) {
-      return " where " + whereParts.join(" and ");
+      return ' where ' + whereParts.join(' and ');
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -178,29 +167,19 @@ export class AdaptableSqlService {
     const whereParts = [];
     for (const filter of filters) {
       if (this.isCustomAdaptableFilter(filter)) {
-        const wherePart = this.createAdaptableCustomFilterSql(
-          filter.columnFilter
-        );
+        const wherePart = this.createAdaptableCustomFilterSql(filter.columnFilter);
         wherePart.length && whereParts.push(wherePart);
-      } else if (filter.dataType === "String") {
-        const wherePart = this.createAdaptableTextFilterSql(
-          filter.columnFilter
-        );
+      } else if (filter.dataType === 'String') {
+        const wherePart = this.createAdaptableTextFilterSql(filter.columnFilter);
         wherePart && whereParts.push(wherePart);
-      } else if (filter.dataType === "Number") {
-        const wherePart = this.createAdaptableNumberFilterSql(
-          filter.columnFilter
-        );
+      } else if (filter.dataType === 'Number') {
+        const wherePart = this.createAdaptableNumberFilterSql(filter.columnFilter);
         wherePart && whereParts.push(wherePart);
-      } else if (filter.dataType === "Date") {
-        const wherePart = this.createAdaptableDateFilterSql(
-          filter.columnFilter
-        );
+      } else if (filter.dataType === 'Date') {
+        const wherePart = this.createAdaptableDateFilterSql(filter.columnFilter);
         wherePart && whereParts.push(wherePart);
-      } else if (filter.dataType === "Boolean") {
-        const wherePart = this.createAdaptableBooleanFilterSql(
-          filter.columnFilter
-        );
+      } else if (filter.dataType === 'Boolean') {
+        const wherePart = this.createAdaptableBooleanFilterSql(filter.columnFilter);
         wherePart && whereParts.push(wherePart);
       }
     }
@@ -217,41 +196,41 @@ export class AdaptableSqlService {
     const columnId = columnFilter.ColumnId;
     const inputs = columnFilter.Predicate.Inputs ?? [];
     switch (columnFilter.Predicate.PredicateId) {
-      case "Values":
+      case 'Values':
         const valuesWhere = inputs
           .map((input) => {
             return `${columnId} = "${input}"`;
           })
-          .join(" OR ");
-        return valuesWhere ?? "";
-      case "ExcludeValues":
+          .join(' OR ');
+        return valuesWhere ?? '';
+      case 'ExcludeValues':
         const excludeValuesWhere = inputs
           .map((input) => {
             return `${columnId} != "${input}"`;
           })
-          .join(" AND ");
-        return excludeValuesWhere.length ? excludeValuesWhere : "";
-      case "Blanks":
+          .join(' AND ');
+        return excludeValuesWhere.length ? excludeValuesWhere : '';
+      case 'Blanks':
         return `${columnId} IS NULL`;
-      case "NonBlanks":
+      case 'NonBlanks':
         return `${columnId} IS NOT NULL`;
-      case "Is":
-        return inputs[0] ? `${columnId} = "${inputs[0]}"` : "";
-      case "IsNot":
-        return inputs[0] ? `${columnId} != "${inputs[0]}"` : "";
-      case "Contains":
-        return inputs[0] ? `${columnId} LIKE "%${inputs[0]}%"` : "";
-      case "NotContains":
-        return inputs[0] ? `${columnId} NOT LIKE "%${inputs[0]}%"` : "";
-      case "StartsWith":
-        return inputs[0] ? `${columnId} LIKE "${inputs[0]}%"` : "";
-      case "EndsWith":
-        return inputs[0] ? `${columnId} LIKE "%${inputs[0]}"` : "";
-      case "Regex":
-        return inputs[0] ? `${columnId} REGEXP '${inputs[0]}'` : "";
+      case 'Is':
+        return inputs[0] ? `${columnId} = "${inputs[0]}"` : '';
+      case 'IsNot':
+        return inputs[0] ? `${columnId} != "${inputs[0]}"` : '';
+      case 'Contains':
+        return inputs[0] ? `${columnId} LIKE "%${inputs[0]}%"` : '';
+      case 'NotContains':
+        return inputs[0] ? `${columnId} NOT LIKE "%${inputs[0]}%"` : '';
+      case 'StartsWith':
+        return inputs[0] ? `${columnId} LIKE "${inputs[0]}%"` : '';
+      case 'EndsWith':
+        return inputs[0] ? `${columnId} LIKE "%${inputs[0]}"` : '';
+      case 'Regex':
+        return inputs[0] ? `${columnId} REGEXP '${inputs[0]}'` : '';
     }
 
-    return "";
+    return '';
   }
 
   /**
@@ -265,71 +244,58 @@ export class AdaptableSqlService {
     const inputs = columnFilter.Predicate.Inputs ?? [];
 
     switch (columnFilter.Predicate.PredicateId) {
-      case "Values":
+      case 'Values':
         const valuesWhere = inputs
           .map((input) => {
             return `${columnId} = ${input}`;
           })
-          .join(" OR ");
-        return valuesWhere ?? "";
-      case "ExcludeValues":
+          .join(' OR ');
+        return valuesWhere ?? '';
+      case 'ExcludeValues':
         const excludeValuesWhere = inputs
           .map((input) => {
             return `${columnId} != ${input}`;
           })
-          .join(" AND ");
-        return excludeValuesWhere.length ? excludeValuesWhere : "";
-      case "Blanks":
+          .join(' AND ');
+        return excludeValuesWhere.length ? excludeValuesWhere : '';
+      case 'Blanks':
         return `${columnId} IS NULL`;
-      case "NonBlanks":
+      case 'NonBlanks':
         return `${columnId} IS NOT NULL`;
-      case "GreaterThan":
-        return inputs[0] !== undefined && inputs[0] !== ""
-          ? `${columnId} > ${inputs[0]}`
-          : "";
-      case "LessThan":
-        return inputs[0] !== undefined && inputs[0] !== ""
-          ? `${columnId} < ${inputs[0]}`
-          : "";
-      case "Positive":
+      case 'GreaterThan':
+        return inputs[0] !== undefined && inputs[0] !== '' ? `${columnId} > ${inputs[0]}` : '';
+      case 'LessThan':
+        return inputs[0] !== undefined && inputs[0] !== '' ? `${columnId} < ${inputs[0]}` : '';
+      case 'Positive':
         return `${columnId} > 0`;
-      case "Negative":
+      case 'Negative':
         return `${columnId} < 0`;
-      case "Zero":
+      case 'Zero':
         return `${columnId} = 0`;
-      case "Equals":
+      case 'Equals':
         const eqInput = inputs[0];
-        return eqInput !== undefined && eqInput !== ""
-          ? `${columnId} = ${inputs[0]}`
-          : "";
-      case "NotEquals":
+        return eqInput !== undefined && eqInput !== '' ? `${columnId} = ${inputs[0]}` : '';
+      case 'NotEquals':
         const notEqInput = inputs[0];
-        return notEqInput !== undefined && notEqInput !== ""
-          ? `${columnId} != ${inputs[0]}`
-          : "";
-      case "Between":
+        return notEqInput !== undefined && notEqInput !== '' ? `${columnId} != ${inputs[0]}` : '';
+      case 'Between':
         const input1 = inputs[0];
         const input2 = inputs[1];
-        if (
-          input1 === undefined ||
-          input1 === "" ||
-          input2 === undefined ||
-          input2 === ""
-        ) {
-          return "";
+        if (input1 === undefined || input1 === '' || input2 === undefined || input2 === '') {
+          return '';
         }
         return `${columnId} >= ${input1} AND ${columnId} <= ${input2}`;
-      case "NotBetween":
+      case 'NotBetween':
         const notInput1 = inputs[0];
         const notInput2 = inputs[1];
 
         if (
           notInput1 === undefined ||
-          notInput1 === "" ||
+          notInput1 === '' ||
           notInput2 === undefined ||
-          notInput2 === ""
+          notInput2 === ''
         ) {
-          return "";
+          return '';
         }
 
         return `${columnId} < ${notInput1} OR ${columnId} > ${notInput2}`;
@@ -361,101 +327,101 @@ export class AdaptableSqlService {
         CEILING((MONTH(${date}) * 4) / 12)
       `;
     };
-    const todaySQL = "CAST(GETDATE() AS date)";
+    const todaySQL = 'CAST(GETDATE() AS date)';
     const tomorrowSQL = `DATEADD(day, 1, ${todaySQL})`;
     const yesterdaySQL = `DATEADD(day, -1, ${todaySQL})`;
     const thisMondaySQL = `CAST(DATEADD(day, -WEEKDAY(${todaySQL}) + 1, ${todaySQL}) AS date)`;
     const thisSundaySql = `CAST(DATEADD(day, 7, ${thisMondaySQL}) AS date)`;
 
     switch (columnFilter.Predicate.PredicateId) {
-      case "Values":
+      case 'Values':
         const valuesWhere = inputs
           .map((input) => {
             return `${columnWithoutTime} = CAST("${input}" as DATE)`;
           })
-          .join(" OR ");
-        return valuesWhere ?? "";
-      case "ExcludeValues":
+          .join(' OR ');
+        return valuesWhere ?? '';
+      case 'ExcludeValues':
         const excludeValuesWhere = inputs
           .map((input) => {
             return `${columnWithoutTime} != CAST("${input}" as DATE)`;
           })
-          .join(" AND ");
-        return excludeValuesWhere.length ? excludeValuesWhere : "";
-      case "Blanks":
+          .join(' AND ');
+        return excludeValuesWhere.length ? excludeValuesWhere : '';
+      case 'Blanks':
         return `${columnId} IS NULL OR ${columnId} = ''`;
-      case "NonBlanks":
+      case 'NonBlanks':
         return `${columnId} IS NOT NULL AND ${columnId} != ''`;
-      case "Today":
-        return isSameDaySql(columnId, "CAST(GETDATE() AS date)");
-      case "Yesterday":
+      case 'Today':
+        return isSameDaySql(columnId, 'CAST(GETDATE() AS date)');
+      case 'Yesterday':
         return isSameDaySql(columnWithoutTime, yesterdaySQL);
-      case "Tomorrow":
+      case 'Tomorrow':
         return isSameDaySql(columnId, tomorrowSQL);
-      case "ThisWeek":
+      case 'ThisWeek':
         return `
           ${columnWithoutTime} >= ${thisMondaySQL} AND
           ${columnWithoutTime} < ${thisSundaySql}
         `;
-      case "ThisMonth":
+      case 'ThisMonth':
         return `
           YEAR(${columnWithoutTime}) = YEAR(${todaySQL}) AND
           MONTH(${columnWithoutTime}) = MONTH(${todaySQL})
         `;
-      case "ThisQuarter":
+      case 'ThisQuarter':
         return `
           ${getQuarterSql(columnWithoutTime)} = ${getQuarterSql(todaySQL)} AND
           YEAR(${columnWithoutTime}) = YEAR(${todaySQL})
         `;
-      case "ThisYear":
+      case 'ThisYear':
         return `
           YEAR(${columnWithoutTime}) = YEAR(${todaySQL})
         `;
-      case "InPast":
+      case 'InPast':
         return `  
           ${columnWithoutTime} < ${todaySQL}
         `;
-      case "InFuture":
+      case 'InFuture':
         return `
           ${columnWithoutTime} > ${todaySQL}
         `;
-      case "After":
+      case 'After':
         return inputs[0]
           ? `
           ${columnWithoutTime} > CAST("${inputs[0]}" as DATE)
         `
-          : "";
-      case "Before":
+          : '';
+      case 'Before':
         return inputs[0]
           ? `
           ${columnWithoutTime} < CAST("${inputs[0]}" as DATE)
         `
-          : "";
-      case "On":
+          : '';
+      case 'On':
         return inputs[0]
           ? `
           ${columnWithoutTime} = CAST("${inputs[0]}" as DATE)
         `
-          : "";
-      case "NotOn":
+          : '';
+      case 'NotOn':
         return inputs[0]
           ? `
           ${columnWithoutTime} != CAST("${inputs[0]}" as DATE)
         `
-          : "";
-      case "InRange":
+          : '';
+      case 'InRange':
         return inputs[0] && inputs[1]
           ? `
           ${columnWithoutTime} > CAST("${inputs[0]}" as DATE) AND
           ${columnWithoutTime} < CAST("${inputs[1]}" as DATE)
         `
-          : "";
+          : '';
 
       // not supported
-      case "LastWorkDay":
-      case "NextWorkDay":
+      case 'LastWorkDay':
+      case 'NextWorkDay':
         // not implemented
-        return "";
+        return '';
     }
   }
 
@@ -469,23 +435,23 @@ export class AdaptableSqlService {
     const columnId = columnFilter.ColumnId;
     const inputs = columnFilter.Predicate.Inputs ?? [];
     switch (columnFilter.Predicate.PredicateId) {
-      case "True":
+      case 'True':
         return `${columnId} = TRUE`;
-      case "False":
+      case 'False':
         return `${columnId} = FALSE`;
-      case "Blanks":
+      case 'Blanks':
         return `${columnId} IS NULL`;
-      case "NonBlanks":
+      case 'NonBlanks':
         return `${columnId} IS NOT NULL`;
-      case "BooleanToggle":
-        return inputs[0] === "unchecked"
+      case 'BooleanToggle':
+        return inputs[0] === 'unchecked'
           ? `${columnId} = FALSE`
-          : inputs[0] === "checked"
+          : inputs[0] === 'checked'
           ? `${columnId} = TRUE`
-          : "";
+          : '';
     }
 
-    return "";
+    return '';
   }
 
   /**
@@ -496,7 +462,7 @@ export class AdaptableSqlService {
    * @param columnFilter Adaptable column filter.
    */
   private isCustomAdaptableFilter(filterDef: ColumnFilterDef) {
-    const customFilterIds = ["superstar"];
+    const customFilterIds = ['superstar'];
     return customFilterIds.includes(filterDef.predicate.id);
   }
 
@@ -508,10 +474,10 @@ export class AdaptableSqlService {
    * @returns
    */
   private createAdaptableCustomFilterSql(columnFilter: ColumnFilter) {
-    if (columnFilter.Predicate.PredicateId === "superstar") {
+    if (columnFilter.Predicate.PredicateId === 'superstar') {
       return `gold > 3 OR (gold + silver + bronze) > 3`;
     }
-    return "";
+    return '';
   }
 
   /**
@@ -530,10 +496,10 @@ export class AdaptableSqlService {
       const rowGroupCol = rowGroupCols[groupKeys.length];
       rowGroupCol.field && colsToGroupBy.push(rowGroupCol.field);
 
-      return " group by " + colsToGroupBy.join(", ");
+      return ' group by ' + colsToGroupBy.join(', ');
     } else {
       // select all columns
-      return "";
+      return '';
     }
   }
 
@@ -546,8 +512,7 @@ export class AdaptableSqlService {
   private createOrderBySql(request: IServerSideGetRowsRequest) {
     const rowGroupCols = request.rowGroupCols ?? [];
     const groupKeys = request.groupKeys ?? [];
-    const sortModel: (SortModelItem & { sortedValues?: string[] })[] =
-      request.sortModel;
+    const sortModel: (SortModelItem & { sortedValues?: string[] })[] = request.sortModel;
 
     const grouping = this.isDoingGrouping(rowGroupCols, groupKeys);
 
@@ -566,18 +531,18 @@ export class AdaptableSqlService {
           sortParts.push(
             `CASE ${item.colId} ${item.sortedValues
               .map((value, index) => `WHEN "${value}" THEN '${index}'`)
-              .join(" ")} ELSE ${item.colId} END ${item.sort}`
+              .join(' ')} ELSE ${item.colId} END ${item.sort}`
           );
         } else {
-          sortParts.push(item.colId + " " + item.sort);
+          sortParts.push(item.colId + ' ' + item.sort);
         }
       });
     }
 
     if (sortParts.length > 0) {
-      return " order by " + sortParts.join(", ");
+      return ' order by ' + sortParts.join(', ');
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -599,11 +564,11 @@ export class AdaptableSqlService {
     const endRow = request.endRow;
 
     if (endRow === undefined) {
-      return "";
+      return '';
     }
 
     const pageSize = endRow - startRow;
-    return " limit " + (pageSize + 1) + " offset " + startRow;
+    return ' limit ' + (pageSize + 1) + ' offset ' + startRow;
   }
 
   /**
@@ -615,74 +580,72 @@ export class AdaptableSqlService {
    */
   private buildQueryASTWherePart(queryAST?: any): string {
     if (typeof queryAST === undefined) {
-      return "";
+      return '';
     }
 
-    if (typeof queryAST === "string") {
+    if (typeof queryAST === 'string') {
       return `"${queryAST}"`;
     }
-    if (typeof queryAST === "number") {
+    if (typeof queryAST === 'number') {
       return `${queryAST}`;
     }
-    if (typeof queryAST === "boolean") {
-      return queryAST === true ? "TRUE" : "FALSE";
+    if (typeof queryAST === 'boolean') {
+      return queryAST === true ? 'TRUE' : 'FALSE';
     }
     if (Array.isArray(queryAST)) {
-      return queryAST
-        .map((item) => this.buildQueryASTWherePart(item))
-        .join(" ");
+      return queryAST.map((item) => this.buildQueryASTWherePart(item)).join(' ');
     }
 
     const args = queryAST?.args.map((n: any) => this.buildQueryASTWherePart(n));
 
     switch (queryAST.type) {
-      case "COL":
+      case 'COL':
         const [colName] = queryAST.args;
         return colName;
-      case "EQ":
+      case 'EQ':
         return `${args[0]} = ${args[1]}`;
-      case "NEQ":
+      case 'NEQ':
         return `${args[0]} != ${args[1]}`;
-      case "GT":
+      case 'GT':
         return `${args[0]} > ${args[1]}`;
-      case "LT":
+      case 'LT':
         return `${args[0]} < ${args[1]}`;
-      case "GTE":
+      case 'GTE':
         return `${args[0]} >= ${args[1]}`;
-      case "OR":
+      case 'OR':
         return `${args[0]} OR ${args[1]}`;
-      case "AND":
+      case 'AND':
         return `${args[0]} AND ${args[1]}`;
-      case "NOT":
+      case 'NOT':
         return `IS NOT ${args[0]}`;
-      case "BETWEEN":
+      case 'BETWEEN':
         return `${args[0]} >= ${args[1]} AND ${args[0]} <= ${args[2]}`;
-      case "IN":
+      case 'IN':
         return args[1]
-          .split(" ")
+          .split(' ')
           .map((input: string) => {
             return `${args[0]} = ${input}`;
           })
-          .join(" OR ");
-      case "IS_BLANK":
+          .join(' OR ');
+      case 'IS_BLANK':
         return `${args[0]} IS NULL`;
-      case "CONTAINS":
+      case 'CONTAINS':
         // must remove string quotations
-        const testStr = args[1]?.replace(/["']/g, "");
+        const testStr = args[1]?.replace(/["']/g, '');
         return `${args[0]} LIKE '%${testStr}%'`;
-      case "STARTS_WITH":
+      case 'STARTS_WITH':
         return `${args[0]} LIKE '${args[1]}%'`;
-      case "ENDS_WITH":
+      case 'ENDS_WITH':
         return `${args[0]} LIKE '%${args[1]}'`;
-      case "FROM_EUROPE":
+      case 'FROM_EUROPE':
         // this is a custom expression function
         return countriesInEurope
           .map(({ country }: { country: string }) => {
             return `country = "${country}"`;
           })
-          .join(" OR ");
+          .join(' OR ');
     }
 
-    return "";
+    return '';
   }
 }

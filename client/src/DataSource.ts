@@ -1,21 +1,17 @@
-import { AdaptableApi } from "@adaptabletools/adaptable-react-aggrid";
-import { ColDef, ColumnApi } from "@ag-grid-community/core";
-import { getRandomInt } from "./utils";
-
-const LOCAL = "http://localhost:4000/api";
-const API_URL = process.env.REACT_APP_ADAPTABLE_API_PATH ?? LOCAL;
+import { AdaptableApi } from '@adaptabletools/adaptable-react-aggrid';
+import { ColDef, ColumnApi } from '@ag-grid-community/core';
+import { getRandomInt } from './utils';
+import { API_URL } from './environment';
 
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: any) {
     const filters = adaptableApi.filterApi.getColumnFilterDefs();
-    const query = adaptableApi.queryApi.getCurrentQuery() ?? "";
+    const query = adaptableApi.queryApi.getCurrentQuery() ?? '';
     const queryAST = adaptableApi.queryLanguageApi.getASTForExpression(query);
     const customSorts = adaptableApi.customSortApi.getActiveCustomSorts();
 
     const sortModel = params.request.sortModel.map((sort: any) => {
-      const customSort = customSorts.find(
-        (customSort) => customSort.ColumnId === sort.colId
-      );
+      const customSort = customSorts.find((customSort) => customSort.ColumnId === sort.colId);
       if (customSort) {
         return {
           ...sort,
@@ -26,7 +22,7 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
     });
 
     if (queryAST) {
-      console.log("queryAST", queryAST);
+      console.log('queryAST', queryAST);
     }
 
     const request = {
@@ -38,9 +34,9 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
     };
 
     fetch(API_URL, {
-      method: "post",
+      method: 'post',
       body: JSON.stringify(request),
-      headers: { "Content-Type": "application/json; charset=utf-8" },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
     })
       .then((httpResponse) => httpResponse.json())
       .then((response) => {
@@ -54,8 +50,7 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
         } else {
           const currentLayout = adaptableApi.layoutApi.getCurrentLayout();
           if (!currentLayout.EnablePivot) {
-            const existingPivotColDefs =
-              params.columnApi!.getPivotResultColumns();
+            const existingPivotColDefs = params.columnApi!.getPivotResultColumns();
             if (existingPivotColDefs?.length) {
               params.columnApi!.setPivotResultColumns([]);
             }
@@ -79,9 +74,7 @@ function addPivotColumnDefs(response: any, columnApi: ColumnApi) {
     return;
   }
 
-  const pivotColDefs: ColDef[] = response.pivotFields.map(function (
-    field: any
-  ) {
+  const pivotColDefs: ColDef[] = response.pivotFields.map(function (field: any) {
     const [key, value] = Object.entries(field)[0];
     const valueStr = `${value}`;
     return {
@@ -97,9 +90,7 @@ function addPivotColumnDefs(response: any, columnApi: ColumnApi) {
 }
 
 export const getPermittedValues = async (columnId: string) => {
-  const jsonResponse = await fetch(
-    `${API_URL}/permitted-values?columnId=${columnId}`
-  );
+  const jsonResponse = await fetch(`${API_URL}/permitted-values?columnId=${columnId}`);
   return jsonResponse.json();
 };
 

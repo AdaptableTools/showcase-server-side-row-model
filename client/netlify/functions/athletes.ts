@@ -1,16 +1,16 @@
-import { Handler } from "@netlify/functions";
-import alasql from "alasql";
-import { SqlClient } from "../../../server/SqlClient";
+import { Handler } from '@netlify/functions';
+import alasql from 'alasql';
+import { SqlClient } from '../../../server/SqlClient';
 
 // @ts-ignore
-import olympicdata from "../../../server/data/olympic_winners.txt";
+import olympicdata from '../../../server/data/olympic_winners.txt';
 alasql(olympicdata);
 
 const corsHeaders = {
-  "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "Access-Control-Allow-Origin": "*",
-  Vary: "Access-Control-Request-Headers",
-  "Access-Control-Allow-Headers": "content-type",
+  'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'Access-Control-Allow-Origin': '*',
+  Vary: 'Access-Control-Request-Headers',
+  'Access-Control-Allow-Headers': 'content-type',
 };
 
 /**
@@ -19,9 +19,9 @@ const corsHeaders = {
  * - this client app is published, and it uses this function to get data
  */
 export const handler: Handler = async (event, context) => {
-  const sqlClient = new SqlClient("Id", "olympic_winners");
+  const sqlClient = new SqlClient('Id', 'olympic_winners');
 
-  if (event.httpMethod === "OPTIONS") {
+  if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
       headers: {
@@ -30,9 +30,9 @@ export const handler: Handler = async (event, context) => {
     };
   }
 
-  if (event.httpMethod === "GET" && event.path.includes("/permitted-values")) {
+  if (event.httpMethod === 'GET' && event.path.includes('/permitted-values')) {
     if (!event.queryStringParameters?.columnId) {
-      throw new Error("columnId is not defined");
+      throw new Error('columnId is not defined');
     }
     const permittedValues = await sqlClient.getPermittedValues(
       event.queryStringParameters.columnId
@@ -46,10 +46,8 @@ export const handler: Handler = async (event, context) => {
     };
   }
 
-  if (event.httpMethod === "GET") {
-    const data = (
-      await sqlClient.getData({ startRow: 0, endRow: 50 } as any, [])
-    ).rows;
+  if (event.httpMethod === 'GET') {
+    const data = (await sqlClient.getData({ startRow: 0, endRow: 50 } as any, [])).rows;
     return {
       statusCode: 200,
       body: JSON.stringify(data),
@@ -83,7 +81,7 @@ export const handler: Handler = async (event, context) => {
       },
     };
   } catch (e) {
-    console.log("failed to parse body", e);
+    console.log('failed to parse body', e);
   }
 
   return {
