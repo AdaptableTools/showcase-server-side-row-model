@@ -31,12 +31,6 @@ export async function handleExport(context: PreProcessExportContext) {
 
   // everything else ('All Data' or any other custom Reports) will be handled server-side
 
-  // const reportColumns = context.getReportColumns().filter((column) => {
-  //   // for simplicity's sake, we're only going to filter out the special (synthetic) columns (Calculated, FreeText, Action)
-  //   // otherwise we would have to evaluate them on the server as well
-  //   return !context.adaptableApi.columnApi.isSpecialColumn(column.columnId);
-  // });
-  // TODO AFL: in the next version of Adaptable, we will be able to use the following instead of the above
   const reportColumns =
     report.Name === 'All Data'
       ? // sending an empty array will cause the server to use all columns

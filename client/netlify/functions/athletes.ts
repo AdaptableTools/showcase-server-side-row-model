@@ -57,6 +57,22 @@ export const handler: Handler = async (event, context) => {
     };
   }
 
+  if (event.httpMethod === 'POST' && event.path.includes('/report')) {
+    const body = JSON.parse(event.body);
+    const reportData = sqlClient.getReportData(
+      body.report,
+      body.reportColumns,
+      body.reportQueryAST
+    );
+    return {
+      statusCode: 200,
+      body: JSON.stringify(reportData),
+      headers: {
+        ...corsHeaders,
+      },
+    };
+  }
+
   try {
     let body: any = {};
     if (!event.body) {
