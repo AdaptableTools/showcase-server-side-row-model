@@ -14,6 +14,7 @@ In particular the demo shows how - with very little custom code - you are still 
 - [Getting Distinct Column Values](https://docs.adaptabletools.com/guide/dev-guide-tutorial-column-values)
 - [Pivot Layouts](https://docs.adaptabletools.com/guide/handbook-layouts-pivot)
 - [Custom Sorts](https://docs.adaptabletools.com/guide/handbook-sorting-custom)
+- [Export](https://docs.adaptabletools.com/guide/handbook-exporting)
 
 **Note: The code is provided as a Starter Guide for demonstration purposes only: it's NOT production ready and shouldn't be used as is**
 
