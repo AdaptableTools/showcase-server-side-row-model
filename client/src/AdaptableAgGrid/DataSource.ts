@@ -1,13 +1,13 @@
 import { AdaptableApi } from '@adaptabletools/adaptable-react-aggrid';
-import { ColDef, ColumnApi } from '@ag-grid-community/core';
+import { ColDef, GridApi } from '@ag-grid-community/core';
 import { getRandomInt } from './utils';
 import { API_URL } from './environment';
 
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: any) {
-    const filters = adaptableApi.filterApi.getColumnFilterDefs();
-    const query = adaptableApi.queryApi.getCurrentQuery() ?? '';
-    const queryAST = adaptableApi.queryLanguageApi.getASTForExpression(query);
+    const filters = adaptableApi.columnFilterApi.getColumnFilterDefs();
+    const query = adaptableApi.gridFilterApi.getCurrentGridFilterExpression() ?? '';
+    const queryAST = adaptableApi.expressionApi.getASTForExpression(query);
     const customSorts = adaptableApi.customSortApi.getActiveCustomSorts();
 
     const sortModel = params.request.sortModel.map((sort: any) => {
@@ -63,19 +63,20 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
         );
       })
       .catch((error) => {
+        console.log(error);
         params.fail();
       });
   },
 });
 
-function addPivotColumnDefs(response: any, columnApi: ColumnApi) {
-  const existingPivotColDefs = columnApi.getPivotResultColumns();
+function addPivotColumnDefs(response: any, agGridApi: GridApi) {
+  const existingPivotColDefs = agGridApi.getPivotResultColumns();
   if (existingPivotColDefs && existingPivotColDefs.length > 0) {
     return;
   }
 
   const pivotColDefs: ColDef[] = response.pivotFields.map(function (field: any) {
-    const [key, value] = Object.entries(field)[0];
+    const [_key, value] = Object.entries(field)[0];
     const valueStr = `${value}`;
     return {
       headerName: valueStr,
@@ -86,7 +87,7 @@ function addPivotColumnDefs(response: any, columnApi: ColumnApi) {
   });
 
   // supply pivot result columns to the grid
-  columnApi.setPivotResultColumns(pivotColDefs);
+  agGridApi.setPivotResultColumns(pivotColDefs);
 }
 
 export const getPermittedValues = async (columnId: string) => {

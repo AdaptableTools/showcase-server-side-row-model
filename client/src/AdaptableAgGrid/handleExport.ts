@@ -1,7 +1,5 @@
 import {
-  AdaptableApi,
   AdaptableColumnBase,
-  AdaptableReportColumn,
   PreProcessExportContext,
   Report,
   ReportData,
@@ -47,7 +45,7 @@ export async function handleExport(context: PreProcessExportContext) {
   };
 
   if (report.Query?.BooleanExpression) {
-    reportConfig.reportQueryAST = context.adaptableApi.queryLanguageApi.getASTForExpression(
+    reportConfig.reportQueryAST = context.adaptableApi.expressionApi.getASTForExpression(
       report.Query.BooleanExpression
     );
   }
