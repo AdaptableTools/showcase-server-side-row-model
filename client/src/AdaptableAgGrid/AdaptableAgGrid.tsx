@@ -57,7 +57,6 @@ export const AdaptableAgGrid = () => {
 
       // server side props
       rowModelType: 'serverSide',
-      pagination: true,
     }),
     []
   );
