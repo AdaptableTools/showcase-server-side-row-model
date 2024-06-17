@@ -2,9 +2,25 @@ import { AdaptableApi } from '@adaptabletools/adaptable-react-aggrid';
 import { ColDef, GridApi, IServerSideGetRowsParams } from '@ag-grid-community/core';
 import { getRandomInt } from './utils';
 import { API_URL } from './environment';
+import { JUMP_TO_INDEX, SERVER_SIDE_CACHE_BLOCK_SIZE } from './AdaptableAgGrid.tsx';
 
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: IServerSideGetRowsParams) {
+    if (JUMP_TO_INDEX.value) {
+      const jumpIndex = JUMP_TO_INDEX.value;
+
+      // tricks the grid that it has jumpIndex + cacheBlockSize rows loaded
+      params.success({
+        rowData: [],
+        rowCount: jumpIndex + SERVER_SIDE_CACHE_BLOCK_SIZE,
+      });
+
+      adaptableApi.agGridApi.ensureIndexVisible(jumpIndex, 'top');
+      JUMP_TO_INDEX.value = undefined;
+      adaptableApi.agGridApi.refreshServerSide({ purge: false });
+      return;
+    }
+
     const filters = adaptableApi.columnFilterApi.getColumnFilterDefs();
     const query = adaptableApi.gridFilterApi.getCurrentGridFilterExpression() ?? '';
     const queryAST = adaptableApi.expressionApi.getASTForExpression(query);

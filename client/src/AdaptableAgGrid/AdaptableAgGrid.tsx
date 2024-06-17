@@ -38,6 +38,12 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
   'ENDS_WITH',
 ];
 
+export const JUMP_TO_INDEX: { value: number | undefined } = {
+  value: undefined,
+};
+
+export const SERVER_SIDE_CACHE_BLOCK_SIZE = 100;
+
 export const AdaptableAgGrid = () => {
   const gridOptions = useMemo<GridOptions<WebFramework>>(
     () => ({
@@ -57,6 +63,9 @@ export const AdaptableAgGrid = () => {
 
       // server side props
       rowModelType: 'serverSide',
+      cacheBlockSize: SERVER_SIDE_CACHE_BLOCK_SIZE,
+      suppressScrollOnNewData: true,
+      blockLoadDebounceMillis: 100,
     }),
     []
   );
@@ -149,6 +158,39 @@ export const AdaptableAgGrid = () => {
               },
             ],
           },
+          {
+            name: 'JumpToIndex',
+            frameworkComponent: ({ adaptableApi }) => {
+              const [index, setIndex] = React.useState('');
+
+              const jumpToIndex = () => {
+                const rowIndex = parseInt(index, 10);
+                if (isNaN(rowIndex)) {
+                  return;
+                }
+
+                JUMP_TO_INDEX.value = rowIndex;
+
+                setIndex('');
+
+                // force SSRM to refresh
+                adaptableApi.agGridApi.refreshServerSide({ purge: true });
+              };
+              return (
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <input
+                    type="number"
+                    value={index}
+                    onChange={(e) => setIndex(e.target.value)}
+                    style={{ width: '100px' }}
+                  />
+                  <button onClick={jumpToIndex} disabled={!index}>
+                    Jump to Index
+                  </button>
+                </div>
+              );
+            },
+          },
         ],
       },
       layoutOptions: {
@@ -215,7 +257,7 @@ export const AdaptableAgGrid = () => {
               Toolbars: ['Alert', 'SystemStatus', 'UpdateData'],
             },
           ],
-          PinnedToolbars: ['GridFilter'],
+          PinnedToolbars: ['GridFilter', 'JumpToIndex'],
         },
         Export: {
           Revision: Date.now(),
