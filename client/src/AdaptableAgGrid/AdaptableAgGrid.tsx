@@ -216,6 +216,7 @@ export const AdaptableAgGrid = () => {
               Toolbars: ['Alert', 'SystemStatus', 'UpdateData'],
             },
           ],
+          PinnedToolbars: ['GridFilter'],
         },
         Export: {
           Revision: Date.now(),
