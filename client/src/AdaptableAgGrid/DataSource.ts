@@ -1,10 +1,10 @@
 import { AdaptableApi } from '@adaptabletools/adaptable-react-aggrid';
-import { ColDef, GridApi } from '@ag-grid-community/core';
+import { ColDef, GridApi, IServerSideGetRowsParams } from '@ag-grid-community/core';
 import { getRandomInt } from './utils';
 import { API_URL } from './environment';
 
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
-  getRows(params: any) {
+  getRows(params: IServerSideGetRowsParams) {
     const filters = adaptableApi.columnFilterApi.getColumnFilterDefs();
     const query = adaptableApi.gridFilterApi.getCurrentGridFilterExpression() ?? '';
     const queryAST = adaptableApi.expressionApi.getASTForExpression(query);
@@ -46,13 +46,13 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
         });
 
         if (response.pivotFields?.length) {
-          addPivotColumnDefs(response, params.columnApi);
+          addPivotColumnDefs(response, params.api);
         } else {
           const currentLayout = adaptableApi.layoutApi.getCurrentLayout();
           if (!currentLayout.EnablePivot) {
-            const existingPivotColDefs = params.columnApi!.getPivotResultColumns();
+            const existingPivotColDefs = params.api.getPivotResultColumns();
             if (existingPivotColDefs?.length) {
-              params.columnApi!.setPivotResultColumns([]);
+              params.api.setPivotResultColumns([]);
             }
           }
         }
