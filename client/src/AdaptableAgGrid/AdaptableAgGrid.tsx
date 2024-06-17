@@ -208,7 +208,7 @@ export const AdaptableAgGrid = () => {
           Tabs: [
             {
               Name: 'Main',
-              Toolbars: ['About', 'Layout', 'Export', 'Query'],
+              Toolbars: ['About', 'Layout', 'Export'],
             },
             {
               Name: 'Data',
