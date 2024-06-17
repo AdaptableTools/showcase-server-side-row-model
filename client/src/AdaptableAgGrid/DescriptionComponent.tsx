@@ -24,6 +24,7 @@ export const DescriptionComponent = () => {
             <li>Create Pivot Layouts</li>
             <li>Provide Custom Sorts</li>
             <li>Get Distinct Column Values</li>
+            <li>Generate a Report in the Client using Server-side data</li>
           </ul>
         </li>
         <li>
@@ -71,6 +72,15 @@ export const DescriptionComponent = () => {
                 target="_blank"
               >
                 Expressions Evaluation
+              </a>
+            </li>
+            <li>
+              {' '}
+              <a
+                href="https://github.com/AdaptableTools/showcase-server-side-row-model/blob/master/client/src/AdaptableAgGrid/handleExport.ts#L23"
+                target="_blank"
+              >
+                generating a Report in the Client using Server-side data
               </a>
             </li>
           </ul>

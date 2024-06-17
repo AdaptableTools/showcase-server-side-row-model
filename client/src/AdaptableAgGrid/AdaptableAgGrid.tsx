@@ -116,7 +116,7 @@ export const AdaptableAgGrid = () => {
                 label: 'READ ME',
                 buttonStyle: {
                   variant: 'outlined',
-                  tone: 'neutral',
+                  tone: 'info',
                 },
                 onClick: (
                   _button: AdaptableButton<CustomToolbarButtonContext>,

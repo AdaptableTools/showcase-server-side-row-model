@@ -12,9 +12,11 @@ import { RangeSelectionModule } from '@ag-grid-enterprise/range-selection';
 import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 import { GridChartsModule } from '@ag-grid-enterprise/charts';
 import { ServerSideRowModelModule } from '@ag-grid-enterprise/server-side-row-model';
+import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 
 export const agGridModules: Module[] = [
   ServerSideRowModelModule,
+  ClientSideRowModelModule,
   SideBarModule,
   ColumnsToolPanelModule,
   FiltersToolPanelModule,
