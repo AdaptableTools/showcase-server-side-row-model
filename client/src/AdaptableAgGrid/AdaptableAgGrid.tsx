@@ -62,8 +62,6 @@ export const AdaptableAgGrid = () => {
       suppressScrollOnNewData: true,
       blockLoadDebounceMillis: 50,
 
-      debug: true,
-
       // common props
       defaultColDef,
       columnDefs,
