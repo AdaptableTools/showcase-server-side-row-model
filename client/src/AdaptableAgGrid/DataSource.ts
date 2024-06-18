@@ -13,6 +13,10 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
       JUMP_TO_INDEX.value = undefined;
 
       // tricks the grid that it has jumpIndex + cacheBlockSize rows loaded
+      params.success({
+        rowData: [],
+        rowCount: jumpIndex + SERVER_SIDE_CACHE_BLOCK_SIZE,
+      });
       params.api.setRowCount(jumpIndex + SERVER_SIDE_CACHE_BLOCK_SIZE, false);
 
       adaptableApi.agGridApi.ensureIndexVisible(jumpIndex, 'top');

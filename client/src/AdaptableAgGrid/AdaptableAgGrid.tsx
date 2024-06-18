@@ -49,7 +49,7 @@ export const SERVER_SIDE_CACHE_BLOCK_SIZE = 100;
 /**
  * https://www.ag-grid.com/javascript-data-grid/grid-options/#reference-miscellaneous-rowBuffer
  */
-export const ROW_BUFFER_SIZE = 10;
+export const ROW_BUFFER_SIZE = 0;
 
 export const AdaptableAgGrid = () => {
   const gridOptions = useMemo<GridOptions<WebFramework>>(
@@ -267,7 +267,7 @@ export const AdaptableAgGrid = () => {
               Toolbars: ['Alert', 'UpdateData'],
             },
           ],
-          PinnedToolbars: ['SystemStatus', 'JumpToIndex'],
+          PinnedToolbars: ['JumpToIndex', 'SystemStatus'],
         },
         Export: {
           Revision: Date.now(),
