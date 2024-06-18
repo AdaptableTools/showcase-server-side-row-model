@@ -42,11 +42,29 @@ export const JUMP_TO_INDEX: { value: number | undefined } = {
   value: undefined,
 };
 
+/**
+ * https://www.ag-grid.com/javascript-data-grid/grid-options/#reference-serverSideRowModel-cacheBlockSize
+ */
 export const SERVER_SIDE_CACHE_BLOCK_SIZE = 100;
+/**
+ * https://www.ag-grid.com/javascript-data-grid/grid-options/#reference-miscellaneous-rowBuffer
+ */
+export const ROW_BUFFER_SIZE = 10;
 
 export const AdaptableAgGrid = () => {
   const gridOptions = useMemo<GridOptions<WebFramework>>(
     () => ({
+      // server side props
+      rowModelType: 'serverSide',
+      cacheBlockSize: SERVER_SIDE_CACHE_BLOCK_SIZE,
+      rowBuffer: ROW_BUFFER_SIZE,
+      // it seems to work without these 2 props, but it's safer to have them, just in case
+      suppressScrollOnNewData: true,
+      blockLoadDebounceMillis: 50,
+
+      debug: true,
+
+      // common props
       defaultColDef,
       columnDefs,
       sideBar: ['adaptable', 'columns', 'filters'],
@@ -60,12 +78,6 @@ export const AdaptableAgGrid = () => {
         ],
       },
       enableRangeSelection: true,
-
-      // server side props
-      rowModelType: 'serverSide',
-      cacheBlockSize: SERVER_SIDE_CACHE_BLOCK_SIZE,
-      suppressScrollOnNewData: true,
-      blockLoadDebounceMillis: 100,
     }),
     []
   );
@@ -250,11 +262,11 @@ export const AdaptableAgGrid = () => {
           Tabs: [
             {
               Name: 'Main',
-              Toolbars: ['About', 'Layout', 'Export'],
+              Toolbars: ['About', 'SystemStatus', 'Export', 'Layout'],
             },
             {
               Name: 'Data',
-              Toolbars: ['Alert', 'SystemStatus', 'UpdateData'],
+              Toolbars: ['Alert', 'UpdateData'],
             },
           ],
           PinnedToolbars: ['GridFilter', 'JumpToIndex'],
@@ -497,6 +509,11 @@ export const AdaptableAgGrid = () => {
       onAdaptableReady={({ adaptableApi, agGridApi }) => {
         // save a reference to adaptable api
         adaptableApiRef.current = adaptableApi;
+
+        // @ts-ignore
+        globalThis.adaptableApi = adaptableApi;
+        // @ts-ignore
+        globalThis.agGridApi = agGridApi;
 
         agGridApi.setGridOption('serverSideDatasource', createDataSource(adaptableApi));
       }}

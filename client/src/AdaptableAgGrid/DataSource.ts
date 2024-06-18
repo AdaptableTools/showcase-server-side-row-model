@@ -4,19 +4,18 @@ import { getRandomInt } from './utils';
 import { API_URL } from './environment';
 import { JUMP_TO_INDEX, SERVER_SIDE_CACHE_BLOCK_SIZE } from './AdaptableAgGrid.tsx';
 
+let timeoutId: any = null;
+
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: IServerSideGetRowsParams) {
     if (JUMP_TO_INDEX.value) {
       const jumpIndex = JUMP_TO_INDEX.value;
+      JUMP_TO_INDEX.value = undefined;
 
       // tricks the grid that it has jumpIndex + cacheBlockSize rows loaded
-      params.success({
-        rowData: [],
-        rowCount: jumpIndex + SERVER_SIDE_CACHE_BLOCK_SIZE,
-      });
+      params.api.setRowCount(jumpIndex + SERVER_SIDE_CACHE_BLOCK_SIZE, false);
 
       adaptableApi.agGridApi.ensureIndexVisible(jumpIndex, 'top');
-      JUMP_TO_INDEX.value = undefined;
       adaptableApi.agGridApi.refreshServerSide({ purge: false });
       return;
     }
@@ -58,7 +57,7 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
       .then((response) => {
         params.success({
           rowData: response.rows,
-          rowCount: response.lastRow ?? 0,
+          rowCount: response.lastRow ?? -1,
         });
 
         if (response.pivotFields?.length) {
@@ -73,9 +72,15 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
           }
         }
 
-        adaptableApi.systemStatusApi.setInfoSystemStatus(
-          `SQL: ${response.sql.slice(0, 40)}`,
-          response.sql
+        // poor man's flashing system status
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        adaptableApi.systemStatusApi.setErrorSystemStatus(`SQL: ${response.sql}`, response.sql);
+        timeoutId = setTimeout(
+          () =>
+            adaptableApi.systemStatusApi.setInfoSystemStatus(`SQL: ${response.sql}`, response.sql),
+          500
         );
       })
       .catch((error) => {
