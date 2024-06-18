@@ -262,14 +262,14 @@ export const AdaptableAgGrid = () => {
           Tabs: [
             {
               Name: 'Main',
-              Toolbars: ['About', 'SystemStatus', 'Export', 'Layout'],
+              Toolbars: ['About', 'GridFilter', 'Export'],
             },
             {
               Name: 'Data',
               Toolbars: ['Alert', 'UpdateData'],
             },
           ],
-          PinnedToolbars: ['GridFilter', 'JumpToIndex'],
+          PinnedToolbars: ['SystemStatus', 'JumpToIndex'],
         },
         Export: {
           Revision: Date.now(),
