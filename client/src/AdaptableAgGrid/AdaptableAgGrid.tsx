@@ -9,6 +9,7 @@ import {
   AdaptableButton,
   CustomToolbarButtonContext,
   ModuleExpressionFunctionsContext,
+  CustomInFilterValuesContext,
 } from '@adaptabletools/adaptable-react-aggrid';
 import { columnDefs, defaultColDef } from './columnDefs';
 import { WebFramework } from './rowData';
@@ -16,7 +17,6 @@ import { agGridModules } from './agGridModules';
 import { handleExport } from './handleExport.ts';
 import { DescriptionComponent } from './DescriptionComponent.tsx';
 import { createDataSource, getPermittedValues } from './DataSource.ts';
-import { CustomInFilterValuesContext } from '@adaptabletools/adaptable/src/AdaptableOptions/FilterOptions';
 
 LicenseManager.setLicenseKey(import.meta.env.VITE_AG_GRID_LICENSE_KEY);
 
