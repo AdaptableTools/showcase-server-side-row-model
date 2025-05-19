@@ -1,12 +1,12 @@
 import { AdaptableApi } from '@adaptabletools/adaptable-react-aggrid';
-import { ColDef, GridApi, IServerSideGetRowsParams } from '@ag-grid-community/core';
+import { ColDef, GridApi, IServerSideGetRowsParams } from 'ag-grid-enterprise';
 import { getRandomInt } from './utils';
 import { API_URL } from './environment';
 
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: IServerSideGetRowsParams) {
-    const filters = adaptableApi.columnFilterApi.getColumnFilterDefs();
-    const query = adaptableApi.gridFilterApi.getCurrentGridFilterExpression() ?? '';
+    const filters = adaptableApi.filterApi.columnFilterApi.getColumnFilterDefs();
+    const query = adaptableApi.filterApi.gridFilterApi.getCurrentGridFilterExpression() ?? '';
     const queryAST = adaptableApi.expressionApi.getASTForExpression(query);
     const customSorts = adaptableApi.customSortApi.getActiveCustomSorts();
 
@@ -48,8 +48,7 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
         if (response.pivotFields?.length) {
           addPivotColumnDefs(response, params.api);
         } else {
-          const currentLayout = adaptableApi.layoutApi.getCurrentLayout();
-          if (!currentLayout.EnablePivot) {
+          if (!adaptableApi.layoutApi.isCurrentLayoutPivot()) {
             const existingPivotColDefs = params.api.getPivotResultColumns();
             if (existingPivotColDefs?.length) {
               params.api.setPivotResultColumns([]);
@@ -82,7 +81,7 @@ function addPivotColumnDefs(response: any, agGridApi: GridApi) {
       headerName: valueStr,
       field: valueStr,
       filter: false,
-      colId: Date.now(),
+      colId: `${Date.now()}`,
     };
   });
 

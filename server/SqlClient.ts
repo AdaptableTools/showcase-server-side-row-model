@@ -1,10 +1,13 @@
 import {
-  AdaptableReportColumn,
+  AdaptableColumnBase,
   ColumnFilterDef,
+  ExportResultData,
+  InFilterValueInfo,
   Report,
+  ReportColumn,
   ReportData,
 } from '@adaptabletools/adaptable';
-import { IServerSideGetRowsRequest } from '@ag-grid-community/core';
+import { IServerSideGetRowsRequest } from 'ag-grid-enterprise';
 import alasql from 'alasql';
 import { AdaptableSqlService } from './SqlService';
 
@@ -34,10 +37,10 @@ export class SqlClient {
    * @param columnName column field name
    * @returns SQL string;
    */
-  getPermittedValues(columnName: string): Promise<string[]> {
+  async getPermittedValues(columnName: string): Promise<InFilterValueInfo[]> {
     const sql = `SELECT DISTINCT ${columnName} FROM olympic_winners`;
-    const results = alasql(sql).map((result: any) => result[columnName]);
-    return results;
+    const sqlResults: string[] = alasql(sql).map((result: any) => result[columnName]);
+    return sqlResults.map((value) => ({ value }));
   }
 
   /**
@@ -64,7 +67,7 @@ export class SqlClient {
     }
   }
 
-  getReportData(report: Report, columns: AdaptableReportColumn[], reportQueryAST?: any) {
+  getReportData(report: Report, columns: ReportColumn[], reportQueryAST?: any): ExportResultData {
     const columnFields = columns.map((column) => column.field || column.columnId);
 
     const sql = this.sqlService.buildReportDataSql(columnFields, reportQueryAST);
@@ -76,7 +79,12 @@ export class SqlClient {
       // @ts-ignore Add the generated SQL to the response for debugging purposes
       sql,
     };
-    return reportData;
+
+    const result: ExportResultData = {
+      type: 'json',
+      data: reportData,
+    };
+    return result;
   }
 
   /**

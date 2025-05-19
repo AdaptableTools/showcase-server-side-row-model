@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { GridOptions } from '@ag-grid-community/core';
-import { LicenseManager } from '@ag-grid-enterprise/core';
+import { LicenseManager, GridOptions, themeQuartz } from 'ag-grid-enterprise';
 import {
   AdaptableApi,
   AdaptableOptions,
@@ -10,7 +9,6 @@ import {
   AdaptableButton,
   CustomToolbarButtonContext,
   ModuleExpressionFunctionsContext,
-  FilterPermittedValuesContext,
 } from '@adaptabletools/adaptable-react-aggrid';
 import { columnDefs, defaultColDef } from './columnDefs';
 import { WebFramework } from './rowData';
@@ -18,6 +16,7 @@ import { agGridModules } from './agGridModules';
 import { handleExport } from './handleExport.ts';
 import { DescriptionComponent } from './DescriptionComponent.tsx';
 import { createDataSource, getPermittedValues } from './DataSource.ts';
+import { CustomInFilterValuesContext } from '@adaptabletools/adaptable/src/AdaptableOptions/FilterOptions';
 
 LicenseManager.setLicenseKey(import.meta.env.VITE_AG_GRID_LICENSE_KEY);
 
@@ -41,6 +40,7 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
 export const AdaptableAgGrid = () => {
   const gridOptions = useMemo<GridOptions<WebFramework>>(
     () => ({
+      theme: themeQuartz,
       defaultColDef,
       columnDefs,
       sideBar: ['adaptable', 'columns', 'filters'],
@@ -53,8 +53,7 @@ export const AdaptableAgGrid = () => {
           },
         ],
       },
-      enableRangeSelection: true,
-
+      cellSelection: true,
       // server side props
       rowModelType: 'serverSide',
       pagination: true,
@@ -68,7 +67,8 @@ export const AdaptableAgGrid = () => {
       userName: 'Server-side Demo User',
       adaptableId: 'AdapTable using Server-Side Row Model',
       exportOptions: {
-        preProcessExport: handleExport,
+        processExport: handleExport,
+        systemReportFormats: ['Excel', 'CSV', 'JSON'],
       },
       settingsPanelOptions: {
         customSettingsPanels: [
@@ -152,9 +152,6 @@ export const AdaptableAgGrid = () => {
           },
         ],
       },
-      layoutOptions: {
-        autoSizeColumnsInPivotLayout: true,
-      },
       predicateOptions: {
         customPredicateDefs: [
           // The custom predicate is transformed in a query in index.ts -> getRows().
@@ -190,20 +187,13 @@ export const AdaptableAgGrid = () => {
           return;
         },
       },
-      userInterfaceOptions: {
-        filterPermittedValues: [
-          {
-            scope: {
-              All: true,
-            },
-            async values(context: FilterPermittedValuesContext) {
-              const columnId = context.column.columnId;
-              return getPermittedValues(columnId);
-            },
-          },
-        ],
+      filterOptions: {
+        customInFilterValues: (context: CustomInFilterValuesContext) => {
+          const columnId = context.column.columnId;
+          return getPermittedValues(columnId);
+        },
       },
-      predefinedConfig: {
+      initialState: {
         Dashboard: {
           Revision: Date.now(),
           Tabs: [
@@ -240,7 +230,7 @@ export const AdaptableAgGrid = () => {
           Layouts: [
             {
               Name: 'Standard Layout',
-              Columns: [
+              TableColumns: [
                 'athlete',
                 'gold',
                 'silver',
@@ -250,7 +240,7 @@ export const AdaptableAgGrid = () => {
                 'sport',
                 'year',
               ],
-              ColumnWidthMap: {
+              ColumnWidths: {
                 athlete: 175,
                 bronze: 85,
                 country: 125,
@@ -264,7 +254,7 @@ export const AdaptableAgGrid = () => {
             },
             {
               Name: 'Sorted Layout',
-              Columns: ['athlete', 'sport', 'country', 'gold', 'silver', 'bronze', 'year'],
+              TableColumns: ['athlete', 'sport', 'country', 'gold', 'silver', 'bronze', 'year'],
               ColumnSorts: [
                 {
                   ColumnId: 'sport',
@@ -287,13 +277,14 @@ export const AdaptableAgGrid = () => {
             // },
             {
               Name: 'Pivot Layout',
-              EnablePivot: true,
-              Columns: [],
               PivotColumns: ['year'],
-              RowGroupedColumns: ['country'],
-              AggregationColumns: {
-                gold: 'sum',
-              },
+              PivotGroupedColumns: ['country'],
+              PivotAggregationColumns: [
+                {
+                  ColumnId: 'gold',
+                  AggFunc: 'sum',
+                },
+              ],
             },
           ],
         },
@@ -364,7 +355,7 @@ export const AdaptableAgGrid = () => {
                 ScalarExpression: '[gold] + [silver] + [bronze] ',
               },
               CalculatedColumnSettings: {
-                DataType: 'Number',
+                DataType: 'number',
                 Filterable: true,
                 Resizable: true,
                 Sortable: true,
@@ -447,7 +438,7 @@ export const AdaptableAgGrid = () => {
     []
   );
 
-  const adaptableApiRef = React.useRef<AdaptableApi>();
+  const adaptableApiRef = React.useRef<AdaptableApi>(null);
 
   return (
     <Adaptable.Provider
@@ -463,7 +454,7 @@ export const AdaptableAgGrid = () => {
     >
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <Adaptable.UI />
-        <div style={{ flex: 1 }} className="ag-theme-alpine">
+        <div style={{ flex: 1 }}>
           <Adaptable.AgGridReact />
         </div>
       </div>

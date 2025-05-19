@@ -1,4 +1,4 @@
-import { ColDef } from '@ag-grid-community/core';
+import { ColDef } from 'ag-grid-enterprise';
 
 export const defaultColDef: ColDef = {
   sortable: true,
@@ -8,12 +8,12 @@ export const defaultColDef: ColDef = {
 };
 
 export const columnDefs: ColDef[] = [
-  { field: 'id', hide: true, type: 'abColDefString' },
-  { field: 'athlete', type: 'abColDefString' },
-  { field: 'country', type: 'abColDefString' },
-  { field: 'sport', type: 'abColDefString' },
-  { field: 'year', type: 'abColDefNumber' },
-  { field: 'gold', aggFunc: 'sum', type: 'abColDefNumber' },
-  { field: 'silver', aggFunc: 'sum', type: 'abColDefNumber' },
-  { field: 'bronze', aggFunc: 'sum', type: 'abColDefNumber' },
+  { field: 'id', hide: true, cellDataType: 'text' },
+  { field: 'athlete', cellDataType: 'text' },
+  { field: 'country', cellDataType: 'text' },
+  { field: 'sport', cellDataType: 'text' },
+  { field: 'year', cellDataType: 'number' },
+  { field: 'gold', aggFunc: 'sum', cellDataType: 'number' },
+  { field: 'silver', aggFunc: 'sum', cellDataType: 'number' },
+  { field: 'bronze', aggFunc: 'sum', cellDataType: 'number' },
 ];

@@ -1,11 +1,11 @@
 import {
-  AdaptableColumnBase,
-  PreProcessExportContext,
+  ProcessExportContext,
   Report,
-  ReportData,
+  ReportColumn,
   SystemReportName,
 } from '@adaptabletools/adaptable-react-aggrid';
 import { API_URL } from './environment';
+import { ExportResultData } from '@adaptabletools/adaptable/src/AdaptableOptions/ExportOptions';
 
 const REPORTS_HANDLED_CLIENT_SIDE: (SystemReportName | string)[] = [
   'Visual Data',
@@ -16,12 +16,14 @@ const REPORTS_HANDLED_CLIENT_SIDE: (SystemReportName | string)[] = [
 
 interface RequestReportConfig {
   report: Report;
-  reportColumns: AdaptableColumnBase[];
+  reportColumns: ReportColumn[];
   reportQueryAST?: any;
 }
 
-export async function handleExport(context: PreProcessExportContext) {
-  const { report } = context;
+export async function handleExport(
+  context: ProcessExportContext
+): Promise<ExportResultData | boolean> {
+  const { report, reportFormat } = context;
   if (REPORTS_HANDLED_CLIENT_SIDE.includes(report.Name)) {
     //  these reports are client-side specific and will be handled by the default behaviour (which is to export the client-side data)
     return true;
@@ -36,7 +38,7 @@ export async function handleExport(context: PreProcessExportContext) {
       : context.getReportColumns().filter((column) => {
           // for simplicity's sake, we're only going to filter out the special (synthetic) columns (Calculated, FreeText, Action)
           // otherwise we would have to evaluate them on the server as well
-          return !context.adaptableApi.columnApi.isSpecialColumn(column.columnId);
+          return !context.adaptableApi.columnApi.isCalculatedColumn(column.columnId);
         });
 
   const reportConfig: RequestReportConfig = {
@@ -55,7 +57,29 @@ export async function handleExport(context: PreProcessExportContext) {
     body: JSON.stringify(reportConfig),
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
   });
-  const serverSideReportData: ReportData = await serverSideResponse.json();
+  const serverSideResultData: ExportResultData = await serverSideResponse.json();
 
-  return serverSideReportData;
+  if (serverSideResultData.type !== 'json') {
+    console.log(
+      'In this showcase we always return JSON from the server, so this should never happen'
+    );
+    return serverSideResultData;
+  }
+
+  if (reportFormat === 'CSV') {
+    const csvContent = context.convertToCsv(serverSideResultData.data);
+    return {
+      type: 'csv',
+      data: csvContent,
+    };
+  }
+  if (reportFormat === 'Excel' || reportFormat === 'VisualExcel') {
+    const excelBLob = context.convertToExcel(serverSideResultData.data);
+    return {
+      type: 'excel',
+      data: excelBLob,
+    };
+  }
+
+  return serverSideResultData;
 }
