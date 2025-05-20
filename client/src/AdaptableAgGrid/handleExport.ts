@@ -8,10 +8,8 @@ import { API_URL } from './environment';
 import { ExportResultData } from '@adaptabletools/adaptable/src/AdaptableOptions/ExportOptions';
 
 const REPORTS_HANDLED_CLIENT_SIDE: (SystemReportName | string)[] = [
-  'Visual Data',
-  'Current Data',
-  'Selected Cells',
-  'Selected Rows',
+  'Current Layout',
+  'Selected Data',
 ];
 
 interface RequestReportConfig {
