@@ -442,7 +442,7 @@ export class AdaptableSqlService {
       .map((predicate) => {
         switch (predicate.PredicateId) {
           case 'superstar':
-            return `gold > 3 OR (gold + silver + bronze) > 3`;
+            return `gold > 2 OR (gold + silver + bronze) > 3`;
           default:
             return '';
         }
