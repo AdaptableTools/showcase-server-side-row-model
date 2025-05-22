@@ -9,7 +9,7 @@ It is a copy of the demo example provided in [Adaptable Docs](https://docs.adapt
 
 In particular the demo shows how - with very little custom code - you are still able to leverage key features in AdapTable while using the Server-Side Row Model, including:
 
-- [Evaluating Predicates](https://docs.adaptabletools.com/guide/adaptable-ql-predicate) (primarily used in Filters)
+- [Evaluating Predicates](https://docs.adaptabletools.com/guide/adaptable-predicate) (primarily used in [Column Filters](https://docs.adaptabletools.com/guide/handbook-column-filter))
 - [Evaluating Expressions](https://docs.adaptabletools.com/guide/adaptable-ql-expression) (used extensively in AdapTable e.g. for Queries, Alerts and Calculated Columns)
 - [Getting Distinct Column Values](https://docs.adaptabletools.com/guide/dev-guide-tutorial-column-values)
 - [Pivot Layouts](https://docs.adaptabletools.com/guide/handbook-layouts-pivot)
