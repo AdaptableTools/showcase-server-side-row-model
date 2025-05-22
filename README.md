@@ -20,6 +20,7 @@ In particular the demo shows how - with very little custom code - you are still 
 
 Additionally, the example includes a small subset of the huge number of other features in AdapTable - which are available in Server-Side Row Model with **no** custom code required:
 
+- [Calculated Columns](https://docs.adaptabletools.com/guide/handbook-calculated-column)
 - [Gradient Styles](https://docs.adaptabletools.com/guide/handbook-styled-column-gradient)
 - [Layouts](https://docs.adaptabletools.com/guide/handbook-layouts)
 - [Custom Toolbars](https://docs.adaptabletools.com/guide/ui-dashboard-custom-toolbars)
