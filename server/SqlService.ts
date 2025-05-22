@@ -217,9 +217,9 @@ export class AdaptableSqlService {
       .map((predicate) => {
         const inputs = predicate.Inputs ?? [];
         switch (predicate.PredicateId) {
-          case 'Values':
+          case 'In':
             return inputs.map((input) => `${columnId} = "${input}"`).join(' OR ');
-          case 'ExcludeValues':
+          case 'NotIn':
             return inputs.map((input) => `${columnId} != "${input}"`).join(' AND ');
           case 'Blanks':
             return `${columnId} IS NULL`;

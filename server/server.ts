@@ -26,13 +26,12 @@ app.post('/api', async function (req, res) {
   res.json(data);
 });
 
-app.get('/api/permitted-values', function (req, res) {
+app.get('/api/permitted-values', async function (req, res) {
   if (!req.query.columnId) {
     throw new Error('columnId is not defined');
   }
 
-  const permittedValues = sqlClient.getPermittedValues(req.query.columnId as string);
-
+  const permittedValues = await sqlClient.getPermittedValues(req.query.columnId as string);
   res.json(permittedValues);
 });
 

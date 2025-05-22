@@ -40,7 +40,8 @@ export class SqlClient {
   async getPermittedValues(columnName: string): Promise<InFilterValueInfo[]> {
     const sql = `SELECT DISTINCT ${columnName} FROM olympic_winners`;
     const sqlResults: string[] = alasql(sql).map((result: any) => result[columnName]);
-    return sqlResults.map((value) => ({ value }));
+    const result = sqlResults.map((value) => ({ value }));
+    return result;
   }
 
   /**
@@ -48,7 +49,7 @@ export class SqlClient {
    *
    * @param request AgGrid request
    * @param filters Adaptable filters
-   * @param queryAST AdaptableQL AST
+   * @param gridFilterAST GridFilter AdaptableQL AST
    * @param includeCount whether to include the total number of rows
    * @param includeSQL whether to include the SQL string in the response.
    * @returns dataset
@@ -56,14 +57,14 @@ export class SqlClient {
   getData(
     request: IServerSideGetRowsRequest,
     filters: ColumnFilterDef[],
-    queryAST?: any,
+    gridFilterAST?: any,
     includeCount: boolean = false,
     includeSQL: boolean = false
   ) {
     if (request.pivotMode) {
-      return this.requestPivotData(request, filters, queryAST, includeCount, includeSQL);
+      return this.requestPivotData(request, filters, gridFilterAST, includeCount, includeSQL);
     } else {
-      return this.requestData(request, filters, queryAST, includeCount, includeSQL);
+      return this.requestData(request, filters, gridFilterAST, includeCount, includeSQL);
     }
   }
 

@@ -5,13 +5,14 @@ import { API_URL } from './environment';
 
 export const createDataSource = (adaptableApi: AdaptableApi) => ({
   getRows(params: IServerSideGetRowsParams) {
-    const filters = adaptableApi.filterApi.columnFilterApi.getColumnFilterDefs();
-    const query = adaptableApi.filterApi.gridFilterApi.getCurrentGridFilterExpression() ?? '';
-    const queryAST = adaptableApi.expressionApi.getASTForExpression(query);
-    const customSorts = adaptableApi.customSortApi.getActiveCustomSorts();
+    const filterState = adaptableApi.stateApi.getAdaptableFilterState();
+    const sortState = adaptableApi.stateApi.getAdaptableSortState();
+    const gridFilterAST = filterState.gridFilterAST;
 
     const sortModel = params.request.sortModel.map((sort: any) => {
-      const customSort = customSorts.find((customSort) => customSort.ColumnId === sort.colId);
+      const customSort = sortState.customSorts.find(
+        (customSort) => customSort.ColumnId === sort.colId
+      );
       if (customSort) {
         return {
           ...sort,
@@ -21,15 +22,15 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
       return sort;
     });
 
-    if (queryAST) {
-      console.log('queryAST', queryAST);
+    if (gridFilterAST) {
+      console.log('gridFilter AST', gridFilterAST);
     }
 
     const request = {
       ...params.request,
       sortModel,
-      adaptableFilters: filters,
-      queryAST,
+      adaptableFilters: filterState.columnFilterDefs,
+      gridFilterAST: filterState.gridFilterAST,
       includeSQL: true,
     };
 

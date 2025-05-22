@@ -166,16 +166,19 @@ export const AdaptableAgGrid = () => {
       },
       expressionOptions: {
         moduleExpressionFunctions: (context: ModuleExpressionFunctionsContext) => {
-          if (context.module === 'NamedQuery') {
+          if (context.module === 'GridFilter') {
             return {
               systemBooleanFunctions: supportedQueryBooleanOperators,
               systemScalarFunctions: ['COL', 'IS_BLANK'],
+
               customBooleanFunctions: {
                 FROM_EUROPE: {
                   // handled on the server
-                  handler: () => null,
+                  handler: () => true,
+                  category: 'customAFL',
                   isPredicate: true,
-                  description: 'Returns true if the athlete is from Europe',
+                  returnType: 'boolean',
+                  description: 'Returns true if the country is from Europe',
                   signatures: ['FROM_EUROPE'],
                 },
               },
