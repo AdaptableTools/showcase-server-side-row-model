@@ -175,11 +175,11 @@ export const AdaptableAgGrid = () => {
                 FROM_EUROPE: {
                   // handled on the server
                   handler: () => true,
-                  category: 'customAFL',
+                  category: 'Custom',
                   isPredicate: true,
                   returnType: 'boolean',
-                  description: 'Returns true if the country is from Europe',
-                  signatures: ['FROM_EUROPE'],
+                  description: 'Returns true if country is in Europe',
+                signatures: ['FROM_EUROPE([country]'],
                 },
               },
               systemAggregatedBooleanFunctions: ['COL'],
