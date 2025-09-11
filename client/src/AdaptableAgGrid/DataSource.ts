@@ -1,4 +1,4 @@
-import { AdaptableApi } from '@adaptabletools/adaptable-react-aggrid';
+import { AdaptableApi, InFilterValue } from '@adaptabletools/adaptable-react-aggrid';
 import { ColDef, GridApi, IServerSideGetRowsParams } from 'ag-grid-enterprise';
 import { getRandomInt } from './utils';
 import { API_URL } from './environment';
@@ -90,7 +90,7 @@ function addPivotColumnDefs(response: any, agGridApi: GridApi) {
   agGridApi.setPivotResultColumns(pivotColDefs);
 }
 
-export const getPermittedValues = async (columnId: string) => {
+export const getPermittedValues = async (columnId: string): Promise<InFilterValue[]> => {
   const jsonResponse = await fetch(`${API_URL}/permitted-values?columnId=${columnId}`);
   return jsonResponse.json();
 };

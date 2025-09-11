@@ -2,7 +2,7 @@ import {
   AdaptableColumnBase,
   ColumnFilterDef,
   ExportResultData,
-  InFilterValueInfo,
+  InFilterValue,
   Report,
   ReportColumn,
   ReportData,
@@ -37,10 +37,10 @@ export class SqlClient {
    * @param columnName column field name
    * @returns SQL string;
    */
-  async getPermittedValues(columnName: string): Promise<InFilterValueInfo[]> {
+  async getPermittedValues(columnName: string): Promise<InFilterValue[]> {
     const sql = `SELECT DISTINCT ${columnName} FROM olympic_winners`;
     const sqlResults: string[] = alasql(sql).map((result: any) => result[columnName]);
-    const result = sqlResults.map((value) => ({ value }));
+    const result = sqlResults.map((value) => ({ value: value, label: value }));
     return result;
   }
 

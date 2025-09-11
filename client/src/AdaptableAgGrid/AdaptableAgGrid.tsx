@@ -179,7 +179,7 @@ export const AdaptableAgGrid = () => {
                   isPredicate: true,
                   returnType: 'boolean',
                   description: 'Returns true if country is in Europe',
-                signatures: ['FROM_EUROPE([country]'],
+                  signatures: ['FROM_EUROPE([country]'],
                 },
               },
               systemAggregatedBooleanFunctions: ['COL'],
@@ -191,9 +191,12 @@ export const AdaptableAgGrid = () => {
         },
       },
       filterOptions: {
-        customInFilterValues: (context: CustomInFilterValuesContext) => {
+        customInFilterValues: async (context: CustomInFilterValuesContext) => {
           const columnId = context.column.columnId;
-          return getPermittedValues(columnId);
+          const permittedValues = await getPermittedValues(columnId);
+          return {
+            values: permittedValues,
+          };
         },
       },
       initialState: {
