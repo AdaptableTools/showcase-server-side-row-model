@@ -41,11 +41,6 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
     })
       .then((httpResponse) => httpResponse.json())
       .then((response) => {
-        params.success({
-          rowData: response.rows,
-          rowCount: response.lastRow ?? 0,
-        });
-
         if (response.pivotFields?.length) {
           addPivotColumnDefs(response, params.api);
         } else {
@@ -56,6 +51,11 @@ export const createDataSource = (adaptableApi: AdaptableApi) => ({
             }
           }
         }
+
+        params.success({
+          rowData: response.rows,
+          rowCount: response.lastRow ?? 0,
+        });
 
         adaptableApi.systemStatusApi.setInfoSystemStatus(
           `SQL: ${response.sql.slice(0, 40)}`,
@@ -75,14 +75,15 @@ function addPivotColumnDefs(response: any, agGridApi: GridApi) {
     return;
   }
 
-  const pivotColDefs: ColDef[] = response.pivotFields.map(function (field: any) {
+  const pivotColDefs: ColDef[] = response.pivotFields.map((field: any, index: number) => {
     const [_key, value] = Object.entries(field)[0];
     const valueStr = `${value}`;
     return {
       headerName: valueStr,
       field: valueStr,
       filter: false,
-      colId: `${Date.now()}`,
+      colId: `${Date.now()}_${index}`,
+      cellDataType: 'number',
     };
   });
 

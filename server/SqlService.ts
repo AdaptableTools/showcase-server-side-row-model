@@ -68,14 +68,18 @@ export class AdaptableSqlService {
     filters?: ColumnFilterDef[],
     queryAST?: any
   ) {
-    const [firstRowGroupCol] = request.rowGroupCols;
+    const rowGroupColsIds = request.rowGroupCols.map((col) => col.id);
     const [firstValueCol] = request.valueCols;
     const [firstPivotCol] = request.pivotCols;
     const orderBySql = this.createOrderBySql(request);
 
+    if (!firstPivotCol) {
+      throw new Error('Pivot column is not defined');
+    }
+
     return `
       SELECT 
-        ${firstRowGroupCol.id}, 
+        ${rowGroupColsIds.join(', ')}, 
         ${firstPivotCol.id}, ${firstValueCol.id}
       FROM olympic_winners 
       PIVOT (SUM([${firstValueCol.id}]) FOR ${firstPivotCol.id})
