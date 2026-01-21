@@ -11,7 +11,7 @@ In particular the demo shows how - with very little custom code - you are still 
 
 - [Evaluating Predicates](https://www.adaptabletools.com/docs/adaptable-predicate) (primarily used in [Column Filters](https://www.adaptabletools.com/docs/handbook-column-filter))
 - [Evaluating Expressions](https://www.adaptabletools.com/docs/adaptable-ql-expression) (used extensively in AdapTable e.g. for Grid Filter, Alerts and Calculated Columns)
-- [Providing Distinct Values to In Filter](https://www.adaptabletools.com/docs/handbook-column-filter-in-predicate)
+- [Providing Distinct Values to In Filter](https://www.adaptabletools.com/docs/handbook-column-filter-in-filter)
 - [Pivot Layouts](https://www.adaptabletools.com/docs/handbook-layouts-pivot)
 - [Custom Sorts](https://www.adaptabletools.com/docshandbook-sorting-custom)
 - [Export](https://www.adaptabletools.com/docs/handbook-exporting)
