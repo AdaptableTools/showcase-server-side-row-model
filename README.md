@@ -5,25 +5,25 @@ This small demo application illustrates how to use AG Grid's [Server-Side RowMod
 
 The demo is based on AG Grid's own [nodejs example](https://www.ag-grid.com/react-data-grid/server-side-operations-nodejs/) and uses the same data source.
 
-It is a copy of the demo example provided in [Adaptable Docs](https://docs.adaptabletools.com/guide/dev-guide-row-models-server-overview)
+It is a copy of the demo example provided in [Adaptable Docs](https://www.adaptabletools.com/docs/dev-guide-row-models-server-overview)
 
 In particular the demo shows how - with very little custom code - you are still able to leverage key features in AdapTable while using the Server-Side Row Model, including:
 
-- [Evaluating Predicates](https://docs.adaptabletools.com/guide/adaptable-predicate) (primarily used in [Column Filters](https://docs.adaptabletools.com/guide/handbook-column-filter))
-- [Evaluating Expressions](https://docs.adaptabletools.com/guide/adaptable-ql-expression) (used extensively in AdapTable e.g. for Grid Filter, Alerts and Calculated Columns)
-- [Providing Distinct Values to In Filter](https://docs.adaptabletools.com/guide/handbook-column-filter-in-predicate)
-- [Pivot Layouts](https://docs.adaptabletools.com/guide/handbook-layouts-pivot)
-- [Custom Sorts](https://docs.adaptabletools.com/guide/handbook-sorting-custom)
-- [Export](https://docs.adaptabletools.com/guide/handbook-exporting)
+- [Evaluating Predicates](https://www.adaptabletools.com/docs/adaptable-predicate) (primarily used in [Column Filters](https://www.adaptabletools.com/docs/handbook-column-filter))
+- [Evaluating Expressions](https://www.adaptabletools.com/docs/adaptable-ql-expression) (used extensively in AdapTable e.g. for Grid Filter, Alerts and Calculated Columns)
+- [Providing Distinct Values to In Filter](https://www.adaptabletools.com/docs/handbook-column-filter-in-predicate)
+- [Pivot Layouts](https://www.adaptabletools.com/docs/handbook-layouts-pivot)
+- [Custom Sorts](https://www.adaptabletools.com/docshandbook-sorting-custom)
+- [Export](https://www.adaptabletools.com/docs/handbook-exporting)
 
 **Note: The code is provided as a Starter Guide for demonstration purposes only: it's NOT production ready and shouldn't be used as is**
 
 Additionally, the example includes a small subset of the huge number of other features in AdapTable - which are available in Server-Side Row Model with **no** custom code required:
 
-- [Calculated Columns](https://docs.adaptabletools.com/guide/handbook-calculated-column)
-- [Gradient Styles](https://docs.adaptabletools.com/guide/handbook-styled-column-gradient)
-- [Layouts](https://docs.adaptabletools.com/guide/handbook-layouts)
-- [Custom Toolbars](https://docs.adaptabletools.com/guide/ui-dashboard-custom-toolbars)
+- [Calculated Columns](https://www.adaptabletools.com/docs/handbook-calculated-column)
+- [Gradient Styles](https://www.adaptabletools.com/docs/handbook-styled-column-gradient)
+- [Layouts](https://www.adaptabletools.com/docs/handbook-layouts)
+- [Custom Toolbars](https://www.adaptabletools.com/docsui-dashboard-custom-toolbars)
 
 ## Usage
 
@@ -33,17 +33,15 @@ Additionally, the example includes a small subset of the huge number of other fe
 
 ## Licences
 
-A licence for AdapTable provides access to all product features as well as quarterly updates and enhancements through the lifetime of the licence, comprehensive support, and access to all 3rd party libraries.
+A [licence for AdapTable](https://www.adaptabletools.com/buy/buying-adaptable-licensing) provides access to all product features as well as quarterly updates and enhancements through the lifetime of the licence, comprehensive support, and access to all 3rd party libraries.
 
 We can make a trial licence available for a short period of time to allow you to try out AdapTable for yourself.
 
-Please contact [`sales@adaptabletools.com`](mailto:sales@adaptabletools.com) or read the [Licence Documentation](https://docs.adaptabletools.com/guide/buying-adaptable-licensing) for more information.
+Please contact [`sales@adaptabletools.com`](mailto:sales@adaptabletools.com) or read the [Licence Documentation](https://www.adaptabletools.com/buy/buying-adaptable-licensing) for more information.
 
 ## Demo
 
-To see AdapTable React in action visit [Adaptable Documentation](https://docs.adaptabletools.com/) which contains a large number of small demos each showing a different feature, function or option in AdapTable React (using dummy data sets).
-
-Additionally, there is a page with larger 'recipe-type' Demos at the [Adaptable Tools website](https://www.adaptabletools.com/demos).
+To see AdapTable React in action visit [Adaptable Documentation](https://www.adaptabletools.com/docs) which contains a large number of small demos each showing a different feature, function or option in AdapTable React (using dummy data sets).
 
 ## Help
 
