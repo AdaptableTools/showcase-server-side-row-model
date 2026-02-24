@@ -298,6 +298,7 @@ export const AdaptableAgGrid = () => {
           Revision: Date.now(),
           AlertDefinitions: [
             {
+              Name: 'New Gold Win',
               Scope: {
                 ColumnIds: ['gold'],
               },
@@ -317,7 +318,7 @@ export const AdaptableAgGrid = () => {
                 Buttons: [
                   {
                     Label: 'Show Me',
-                    Action: ['jump-to-cell', 'highlight-cell'],
+                    Command: ['jump-to-cell', 'highlight-cell'],
                     ButtonStyle: {
                       variant: 'raised',
                     },
@@ -326,6 +327,7 @@ export const AdaptableAgGrid = () => {
               },
             },
             {
+              Name: 'Won 3 more Gold Medals',
               Scope: {
                 All: true,
               },
@@ -374,12 +376,16 @@ export const AdaptableAgGrid = () => {
           Revision: Date.now(),
           FormatColumns: [
             {
+              Name: 'Gold, Silver, Bronze',
               Scope: {
                 ColumnIds: ['gold', 'silver', 'bronze'],
               },
-              CellAlignment: 'Right',
+              Style:{
+                Alignment: 'Right',
+              }
             },
             {
+              Name: 'Athlete',
               Scope: {
                 ColumnIds: ['athlete'],
               },
@@ -388,6 +394,7 @@ export const AdaptableAgGrid = () => {
               },
             },
             {
+              Name: 'Gold > 1 and Swimming',
               Scope: { All: true },
               Style: {
                 BackColor: '#87cefa',
@@ -410,6 +417,7 @@ export const AdaptableAgGrid = () => {
           Revision: Date.now(),
           CustomSorts: [
             {
+              Name: 'Athlete',
               ColumnId: 'athlete',
               SortedValues: ['Zou Kai', 'Natalie Coughlin', 'Missy Franklin'],
             },

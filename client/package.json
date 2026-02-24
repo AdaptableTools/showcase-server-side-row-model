@@ -10,10 +10,10 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {
-    "@adaptabletools/adaptable-react-aggrid": "21.0.6",
-    "ag-grid-enterprise": "34.0.2",
-    "ag-grid-react": "34.0.2",
-    "ag-charts-enterprise": "12.0.2",
+    "@adaptabletools/adaptable-react-aggrid": "22.0.0",
+    "ag-grid-enterprise": "35.0.1",
+    "ag-grid-react": "35.0.1",
+    "ag-charts-enterprise": "13.0.1",
     "@netlify/functions": "1.0.0",
     "alasql": "1.7.3",
     "react": "^19.0.0",

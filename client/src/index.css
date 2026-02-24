@@ -1,5 +1,4 @@
-@import '@adaptabletools/adaptable-react-aggrid/base.css';
-@import '@adaptabletools/adaptable-react-aggrid/themes/light.css';
+@import '@adaptabletools/adaptable-react-aggrid/index.css';
 @import '@adaptabletools/adaptable-react-aggrid/themes/dark.css';
 
 :root {
