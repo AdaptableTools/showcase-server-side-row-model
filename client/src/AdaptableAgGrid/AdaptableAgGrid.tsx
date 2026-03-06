@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { LicenseManager, GridOptions, themeQuartz } from 'ag-grid-enterprise';
-import {
+import type {
   AdaptableApi,
   AdaptableOptions,
-  Adaptable,
   BooleanFunctionName,
   AdaptableButton,
   CustomToolbarButtonContext,
   ModuleExpressionFunctionsContext,
   CustomInFilterValuesContext,
 } from '@adaptabletools/adaptable-react-aggrid';
+import { Adaptable } from '@adaptabletools/adaptable-react-aggrid';
 import { columnDefs, defaultColDef } from './columnDefs';
-import { WebFramework } from './rowData';
+import type { WebFramework } from './rowData';
 import { agGridModules } from './agGridModules';
 import { handleExport } from './handleExport.ts';
 import { DescriptionComponent } from './DescriptionComponent.tsx';
@@ -290,6 +290,14 @@ export const AdaptableAgGrid = () => {
                   ColumnId: 'gold',
                   AggFunc: 'sum',
                 },
+                {
+                  ColumnId: 'silver',
+                  AggFunc: 'sum',
+                },
+                {
+                  ColumnId: 'bronze',
+                  AggFunc: 'sum',
+                }
               ],
             },
           ],
@@ -367,6 +375,7 @@ export const AdaptableAgGrid = () => {
                 Filterable: true,
                 Resizable: true,
                 Sortable: true,
+                Groupable: false,
               },
               FriendlyName: 'Total',
             },
@@ -380,7 +389,7 @@ export const AdaptableAgGrid = () => {
               Scope: {
                 ColumnIds: ['gold', 'silver', 'bronze'],
               },
-              Style:{
+              Style: {
                 Alignment: 'Right',
               }
             },
