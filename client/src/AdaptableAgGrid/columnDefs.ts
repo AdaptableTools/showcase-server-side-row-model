@@ -16,4 +16,5 @@ export const columnDefs: ColDef[] = [
   { field: 'gold', aggFunc: 'sum', cellDataType: 'number', enableValue: true },
   { field: 'silver', aggFunc: 'sum', cellDataType: 'number', enableValue: true },
   { field: 'bronze', aggFunc: 'sum', cellDataType: 'number', enableValue: true },
+  { field: 'date_iso', cellDataType: 'date' },
 ];
