@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { LicenseManager, GridOptions, themeQuartz } from 'ag-grid-enterprise';
-import {
+import type {
   AdaptableApi,
   AdaptableOptions,
-  Adaptable,
   BooleanFunctionName,
   AdaptableButton,
   CustomToolbarButtonContext,
   ModuleExpressionFunctionsContext,
   CustomInFilterValuesContext,
 } from '@adaptabletools/adaptable-react-aggrid';
+import { Adaptable } from '@adaptabletools/adaptable-react-aggrid';
 import { columnDefs, defaultColDef } from './columnDefs';
-import { WebFramework } from './rowData';
 import { agGridModules } from './agGridModules';
 import { handleExport } from './handleExport.ts';
 import { DescriptionComponent } from './DescriptionComponent.tsx';
@@ -38,7 +37,7 @@ const supportedQueryBooleanOperators: BooleanFunctionName[] = [
 ];
 
 export const AdaptableAgGrid = () => {
-  const gridOptions = useMemo<GridOptions<WebFramework>>(
+  const gridOptions = useMemo<GridOptions<any>>(
     () => ({
       theme: themeQuartz,
       defaultColDef,
@@ -60,12 +59,12 @@ export const AdaptableAgGrid = () => {
     }),
     []
   );
-  const adaptableOptions = useMemo<AdaptableOptions<WebFramework>>(
+  const adaptableOptions = useMemo<AdaptableOptions<any>>(
     () => ({
       licenseKey: import.meta.env.VITE_ADAPTABLE_LICENSE_KEY,
       primaryKey: 'id',
       userName: 'Server-side Demo User',
-      adaptableId: 'AdapTable using Server-Side Row Model',
+      adaptableId: 'AdapTable using Server-Side Row Model!',
       exportOptions: {
         processExport: handleExport,
         systemReportFormats: ['Excel', 'CSV', 'JSON'],
@@ -192,7 +191,11 @@ export const AdaptableAgGrid = () => {
       },
       filterOptions: {
         customInFilterValues: async (context: CustomInFilterValuesContext) => {
-          const columnId = context.column.columnId;
+          let columnId = context.column.columnId;
+          if (columnId === 'ag-Grid-AutoColumn') {
+            columnId =
+              context.adaptableApi.layoutApi.getCurrentLayout().RowGroupedColumns?.[0] || '';
+          }
           const permittedValues = await getPermittedValues(columnId);
           return {
             values: permittedValues,
@@ -236,6 +239,7 @@ export const AdaptableAgGrid = () => {
           Layouts: [
             {
               Name: 'Standard Layout',
+              // GridFilter: { Expression: '[gold]=8' },
               TableColumns: [
                 'athlete',
                 'gold',
@@ -245,17 +249,50 @@ export const AdaptableAgGrid = () => {
                 'country',
                 'sport',
                 'year',
+                'date_iso',
               ],
-              ColumnWidths: {
-                athlete: 175,
-                bronze: 85,
-                country: 125,
-                gold: 100,
-                id: 50,
-                silver: 100,
-                sport: 175,
-                totalMedals: 100,
-                year: 115,
+              ColumnHeaders: {
+                date_iso: 'Date',
+              },
+              ColumnSizing: {
+                athlete: { Width: 175 },
+                bronze: { Width: 85 },
+                country: { Width: 125 },
+                gold: { Width: 100 },
+                id: { Width: 50 },
+                silver: { Width: 100 },
+                sport: { Width: 175 },
+                totalMedals: { Width: 100 },
+                year: { Width: 115 },
+              },
+            },
+            {
+              Name: 'Grouped By Country',
+              TableColumns: [
+                'athlete',
+                'gold',
+                'silver',
+                'bronze',
+                'totalMedals',
+                'country',
+                'sport',
+                'year',
+                'date_iso',
+              ],
+              RowGroupedColumns: ['country'],
+              ColumnHeaders: {
+                date_iso: 'Date',
+              },
+              ColumnSizing: {
+                athlete: { Width: 175 },
+                bronze: { Width: 85 },
+                country: { Width: 125 },
+                gold: { Width: 100 },
+                id: { Width: 50 },
+                silver: { Width: 100 },
+                sport: { Width: 175 },
+                totalMedals: { Width: 100 },
+                year: { Width: 115 },
               },
             },
             {
@@ -288,6 +325,14 @@ export const AdaptableAgGrid = () => {
               PivotAggregationColumns: [
                 {
                   ColumnId: 'gold',
+                  AggFunc: 'sum',
+                },
+                {
+                  ColumnId: 'silver',
+                  AggFunc: 'sum',
+                },
+                {
+                  ColumnId: 'bronze',
                   AggFunc: 'sum',
                 },
               ],
@@ -367,6 +412,7 @@ export const AdaptableAgGrid = () => {
                 Filterable: true,
                 Resizable: true,
                 Sortable: true,
+                Groupable: false,
               },
               FriendlyName: 'Total',
             },
@@ -380,9 +426,9 @@ export const AdaptableAgGrid = () => {
               Scope: {
                 ColumnIds: ['gold', 'silver', 'bronze'],
               },
-              Style:{
+              Style: {
                 Alignment: 'Right',
-              }
+              },
             },
             {
               Name: 'Athlete',
@@ -396,10 +442,10 @@ export const AdaptableAgGrid = () => {
             {
               Name: 'Gold > 1 and Swimming',
               Scope: { All: true },
-              Style: {
-                BackColor: '#87cefa',
-                ForeColor: '#ffffff',
-              },
+              // Style: {
+              //   BackColor: '#87cefa',
+              //   ForeColor: '#ffffff',
+              // },
               Rule: { BooleanExpression: '[gold] > 1 AND [sport]="Swimming" ' },
             },
           ],

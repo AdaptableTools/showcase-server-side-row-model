@@ -10,10 +10,11 @@ export const defaultColDef: ColDef = {
 export const columnDefs: ColDef[] = [
   { field: 'id', hide: true, cellDataType: 'text' },
   { field: 'athlete', cellDataType: 'text' },
-  { field: 'country', cellDataType: 'text' },
-  { field: 'sport', cellDataType: 'text' },
-  { field: 'year', cellDataType: 'number' },
-  { field: 'gold', aggFunc: 'sum', cellDataType: 'number' },
-  { field: 'silver', aggFunc: 'sum', cellDataType: 'number' },
-  { field: 'bronze', aggFunc: 'sum', cellDataType: 'number' },
+  { field: 'country', cellDataType: 'text', enablePivot: true },
+  { field: 'sport', cellDataType: 'text', enablePivot: true },
+  { field: 'year', cellDataType: 'number', enablePivot: true },
+  { field: 'gold', aggFunc: 'sum', cellDataType: 'number', enableValue: true },
+  { field: 'silver', aggFunc: 'sum', cellDataType: 'number', enableValue: true },
+  { field: 'bronze', aggFunc: 'sum', cellDataType: 'number', enableValue: true },
+  { field: 'date_iso', cellDataType: 'date' },
 ];
