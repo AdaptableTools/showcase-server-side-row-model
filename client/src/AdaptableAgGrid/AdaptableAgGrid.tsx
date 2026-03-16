@@ -193,7 +193,8 @@ export const AdaptableAgGrid = () => {
         customInFilterValues: async (context: CustomInFilterValuesContext) => {
           let columnId = context.column.columnId;
           if (columnId === 'ag-Grid-AutoColumn') {
-            columnId = context.adaptableApi.layoutApi.getCurrentLayout().RowGroupedColumns?.[0] || '';
+            columnId =
+              context.adaptableApi.layoutApi.getCurrentLayout().RowGroupedColumns?.[0] || '';
           }
           const permittedValues = await getPermittedValues(columnId);
           return {
@@ -238,7 +239,7 @@ export const AdaptableAgGrid = () => {
           Layouts: [
             {
               Name: 'Standard Layout',
-              GridFilter: { Expression: '[gold]=8' },
+              // GridFilter: { Expression: '[gold]=8' },
               TableColumns: [
                 'athlete',
                 'gold',
@@ -248,7 +249,7 @@ export const AdaptableAgGrid = () => {
                 'country',
                 'sport',
                 'year',
-                'date_iso'
+                'date_iso',
               ],
               ColumnHeaders: {
                 date_iso: 'Date',
@@ -276,7 +277,7 @@ export const AdaptableAgGrid = () => {
                 'country',
                 'sport',
                 'year',
-                'date_iso'
+                'date_iso',
               ],
               RowGroupedColumns: ['country'],
               ColumnHeaders: {
@@ -333,7 +334,7 @@ export const AdaptableAgGrid = () => {
                 {
                   ColumnId: 'bronze',
                   AggFunc: 'sum',
-                }
+                },
               ],
             },
           ],
@@ -427,7 +428,7 @@ export const AdaptableAgGrid = () => {
               },
               Style: {
                 Alignment: 'Right',
-              }
+              },
             },
             {
               Name: 'Athlete',
