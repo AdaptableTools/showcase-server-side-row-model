@@ -34,15 +34,11 @@ export async function handleExport(
 
   // everything else ('All Data' or any other custom Reports) will be handled server-side
 
-  const reportColumns =
-    report.Name === 'All Data'
-      ? // sending an empty array will cause the server to use all columns
-        []
-      : context.getReportColumns().filter((column) => {
-          // for simplicity's sake, we're only going to filter out the special (synthetic) columns (Calculated, FreeText, Action)
-          // otherwise we would have to evaluate them on the server as well
-          return !context.adaptableApi.columnApi.isCalculatedColumn(column.columnId);
-        });
+  const reportColumns = context.getReportColumns().filter((column: ReportColumn) => {
+    // for simplicity's sake, we're only going to filter out the special (synthetic) columns (Calculated, FreeText, Action)
+    // otherwise we would have to evaluate them on the server as well
+    return !context.adaptableApi.columnApi.isCalculatedColumn(column.columnId);
+  });
 
   const reportConfig: RequestReportConfig = {
     report,
