@@ -1,4 +1,4 @@
-# SQLite Node Server
+# Node Server with SQLite
 
 This package recreates the public Adaptable showcase server on top of `SQLite + Express + Drizzle ORM`, while tightening the API contract, moving to parameterized SQL, and adding a SQLite-native pivot strategy.
 
