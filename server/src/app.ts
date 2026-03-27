@@ -35,6 +35,10 @@ export function createApp(service: OlympicWinnersService = new OlympicWinnersSer
     res.json({ ok: true });
   });
 
+  app.get('/ok', (_req, res) => {
+    res.json({ ok: true, timestamp: new Date().toISOString() });
+  });
+
   app.post(
     '/athletes/api/query',
     asyncHandler(async (req, res) => {
