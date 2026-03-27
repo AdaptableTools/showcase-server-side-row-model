@@ -1,3 +1,8 @@
-.netlify
-.netlify/
-.netlify/*
+node_modules
+dist
+db/*.sqlite
+db/*.sqlite-shm
+db/*.sqlite-wal
+
+# Override root-level ignore — we need lock file for Docker builds
+!package-lock.json
