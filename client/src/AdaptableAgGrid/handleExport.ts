@@ -126,16 +126,30 @@ async function handlePivotExport(context: ProcessExportContext): Promise<ExportR
     dataType: 'text' as const,
   }));
 
-  const pivotResultColumns: ReportColumn[] = (response.pivotFields ?? []).map(
-    (pf: { field: string; pivotValues: Record<string, string | number>; valueColumn: string }) => ({
-      columnId: pf.field,
-      field: pf.field,
-      friendlyName: pf.field.replace(/_/g, ' '),
-      dataType: 'number' as const,
-    })
-  );
+  // Pivot Sum Layout (no pivot columns): value cols are plain aggregation fields.
+  // True pivot: columns come from expanded pivotFields metadata.
+  const valueResultColumns: ReportColumn[] =
+    pivotCols.length === 0
+      ? valueCols.map((col: { id: string; field: string }) => ({
+          columnId: col.id,
+          field: col.field,
+          friendlyName: col.field.charAt(0).toUpperCase() + col.field.slice(1),
+          dataType: 'number' as const,
+        }))
+      : (response.pivotFields ?? []).map(
+          (pf: {
+            field: string;
+            pivotValues: Record<string, string | number>;
+            valueColumn: string;
+          }) => ({
+            columnId: pf.field,
+            field: pf.field,
+            friendlyName: pf.field.replace(/_/g, ' '),
+            dataType: 'number' as const,
+          })
+        );
 
-  const columns = [...groupColumns, ...pivotResultColumns];
+  const columns = [...groupColumns, ...valueResultColumns];
   const allFieldIds = columns.map((c) => c.field ?? c.columnId);
 
   const rows = (response.rows ?? []).map((row: Record<string, unknown>) => {

@@ -235,7 +235,7 @@ export const AdaptableAgGrid = () => {
         },
         Layout: {
           Revision: Date.now(),
-          CurrentLayout: 'Standard Layout',
+          CurrentLayout: 'Pivot Layout No Pivot Columns',
           Layouts: [
             {
               Name: 'Standard Layout',
@@ -321,6 +321,25 @@ export const AdaptableAgGrid = () => {
             {
               Name: 'Pivot Layout',
               PivotColumns: ['year'],
+              PivotGroupedColumns: ['country'],
+              PivotAggregationColumns: [
+                {
+                  ColumnId: 'gold',
+                  AggFunc: 'sum',
+                },
+                {
+                  ColumnId: 'silver',
+                  AggFunc: 'sum',
+                },
+                {
+                  ColumnId: 'bronze',
+                  AggFunc: 'sum',
+                },
+              ],
+            },
+            {
+              Name: 'Pivot Layout No Pivot Columns',
+              PivotColumns: [],
               PivotGroupedColumns: ['country'],
               PivotAggregationColumns: [
                 {

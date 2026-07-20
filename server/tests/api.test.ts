@@ -81,6 +81,34 @@ describe('SQLite node server API', () => {
     assert.ok(response.body.rows[0].gold >= response.body.rows[1].gold);
   });
 
+  it('treats pivotMode with empty pivotCols as grouped aggregations (Pivot Sum Layout)', async () => {
+    const response = await request(app)
+      .post('/athletes/api/query')
+      .send({
+        adaptableFilters: [],
+        endRow: 10,
+        groupKeys: [],
+        pivotCols: [],
+        pivotMode: true,
+        rowGroupCols: [{ id: 'country', field: 'country' }],
+        sortModel: [{ colId: 'gold', sort: 'desc' }],
+        startRow: 0,
+        valueCols: [
+          { id: 'gold', field: 'gold', aggFunc: 'sum' },
+          { id: 'silver', field: 'silver', aggFunc: 'sum' },
+          { id: 'bronze', field: 'bronze', aggFunc: 'sum' },
+        ],
+      });
+
+    assert.equal(response.status, 200);
+    assert.ok(response.body.rows.length > 0);
+    assert.equal(response.body.rows[0].country, 'United States');
+    assert.equal(typeof response.body.rows[0].gold, 'number');
+    assert.equal(typeof response.body.rows[0].silver, 'number');
+    assert.equal(typeof response.body.rows[0].bronze, 'number');
+    assert.ok(response.body.rows[0].gold >= response.body.rows[1].gold);
+  });
+
   it('supports cleaned-up compatibility for gridFilterAST aliasing', async () => {
     const response = await request(app)
       .post('/athletes/api')

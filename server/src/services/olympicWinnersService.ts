@@ -121,7 +121,10 @@ export class OlympicWinnersService {
   }
 
   getData(request: NormalizedQueryRequest): QueryResponse {
-    return request.pivotMode ? this.getPivotData(request) : this.getTableData(request);
+    // Pivot Sum Layout: pivotMode with no pivot columns is grouped aggregations
+    // (row groups + value cols), not an empty pivot expansion.
+    const usePivotExpansion = request.pivotMode && request.pivotCols.length > 0;
+    return usePivotExpansion ? this.getPivotData(request) : this.getTableData(request);
   }
 
   private getTableData(request: NormalizedQueryRequest): QueryResponse {
